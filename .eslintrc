@@ -1,0 +1,15 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["airbnb/base"],
+  "rules": {
+    "brace-style": [2, "stroustrup"],
+    "quote-props": [2, "consistent-as-needed"],
+    "max-len": [2, 120, 2, {"ignoreUrls": true}],
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  }
+}
