@@ -75,11 +75,11 @@ gulp.task('build:pot', function() {
 
 ## Options
 
-**`target`**
+#### `target`
 
 The destination path for the .pot file.
 
-**`componentPropsMap`**
+#### `componentPropsMap`
 
 ```js
 {
@@ -115,7 +115,7 @@ msgid "One item"
 msgid_plural "{{ count }} items"
 ```
 
-**`funcArgumentsMap`**
+#### `funcArgumentsMap`
 
 ```
 {
