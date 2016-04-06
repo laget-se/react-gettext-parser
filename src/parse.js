@@ -126,13 +126,11 @@ export const getTraverser = (cb = () => {}, opts = {}) => {
   };
 };
 
-export const getTree = (code, opts = {}) =>
+export const getTree = (code) =>
   babylon.parse(code, BABEL_PARSING_OPTS);
 
 export const parse = (code, opts = {}, cb = () => {}) => {
-  console.log('COOODE', code);
-
-  const ast = getTree(code.toString('utf8'), opts);
+  const ast = getTree(code.toString('utf8'));
   const traverser = getTraverser((messages) => {
     const potContents = toPot(messages);
     outputPot(opts.target, potContents, cb);
