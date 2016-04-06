@@ -2,55 +2,68 @@
 import fs from 'fs';
 import * as babylon from 'babylon';
 import traverse from 'babel-traverse';
-import uniq from 'lodash.uniq';
+import curry from 'lodash.curry';
 
 import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS } from './defaults';
 import { toPot } from './json2po';
 import { isGettextFuncCall, isGettextComponent } from './node-helpers';
 import { outputPot } from './io';
+import { mergeObjects, concatProp, uniquePropValue } from './utils';
 
+/**
+ * Returns a gettext message given a mapping of args to gettext props and
+ * a CallExpression node
+ */
 export const getGettextMessageFromFuncCall = (argsMap, node) => {
   const mappedArgs = argsMap[node.callee.name];
 
   return mappedArgs
     .map((arg, i) => (arg ? { [arg]: node.arguments[i].value } : null))
     .filter(x => x)
-    .reduce((values, argValue) => ({ ...values, ...argValue }), {});
+    .reduce(mergeObjects(), {});
 };
 
-export const getGettextPropValues = (propsMap, node) => {
-  const mappedProps = Object.keys(propsMap[node.name.name]);
+/**
+ * Returns a gettext message given a mapping of component props to gettext
+ * props and a JSXOpeningElement node
+ */
+export const getGettextMessageFromComponent = (propsMap, node) => {
+  const componentPropsLookup = propsMap[node.name.name];
+  const gettextPropNames = Object.keys(componentPropsLookup);
 
-  return node.attributes
-    .filter(attr => mappedProps.indexOf(attr.name.name) !== -1)
+  const propValues = node.attributes
+    .filter(attr => gettextPropNames.indexOf(attr.name.name) !== -1)
     .reduce((props, attr) => ({ ...props, [attr.name.name]: attr.value.value }), {});
-};
 
-export const getGettextMessageFromPropValues = (propsMap, componentName, propValues) =>
-  Object.keys(propValues)
+  return Object.keys(propValues)
     .reduce((message, propName) => ({
       ...message,
-      [propsMap[componentName][propName]]: propValues[propName],
+      [componentPropsLookup[propName]]: propValues[propName],
     }), {});
+};
 
-export const areMessagesEqual = (a, b) =>
-  (a.msgid === b.msgid && a.msgid_plural === b.msgid_plural && a.context === b.context);
+/**
+ * Returns whether two gettext messages are considered equal
+ */
+export const areMessagesEqual = curry((a, b) =>
+  (a.msgid === b.msgid && a.msgid_plural === b.msgid_plural && a.context === b.context)
+);
 
-export const getMergedMessages = (a, b) => ({
-  ...a,
-  sources: uniq(a.sources.concat(b.sources)),
-});
+// Helpers
+const concatSources = concatProp('sources');
+const uniqueSources = uniquePropValue('sources');
 
+/**
+ * Takes a list of messages and returns a list with unique ones with the merged
+ * messages concatenated
+ */
 export const getUniqueMessages = messages =>
   messages.reduce((unique, message) => {
-    const existingMessages = unique.filter(x => areMessagesEqual(x, message));
+    const isEqualMessage = areMessagesEqual(message);
+    const existingMessage = unique.filter(x => isEqualMessage(x)).shift();
 
-    return existingMessages.length > 0
-      ? unique.map(x => (
-        areMessagesEqual(x, existingMessages[0])
-          ? getMergedMessages(x, existingMessages[0])
-          : x
-      ))
+    return existingMessage
+      ? unique.map(x => (isEqualMessage(x) ? uniqueSources(concatSources(x, message)) : x))
       : unique.concat(message);
   }, []);
 
@@ -70,8 +83,8 @@ export const getTraverser = (cb = () => {}, opts = {}) => {
         };
       },
 
-      exit() {
-        cb(getUniqueMessages(messages));
+      exit(path, state) {
+        cb(getUniqueMessages(messages), state);
       },
     },
 
@@ -88,8 +101,7 @@ export const getTraverser = (cb = () => {}, opts = {}) => {
           return;
         }
 
-        const propValues = getGettextPropValues(propsMap, node);
-        const message = getGettextMessageFromPropValues(propsMap, node.name.name, propValues);
+        const message = getGettextMessageFromComponent(propsMap, node);
 
         if (envOpts.filename) {
           message.sources = [`${envOpts.filename}:${node.loc.start.line}`];
