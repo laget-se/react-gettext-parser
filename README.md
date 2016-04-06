@@ -1,3 +1,5 @@
+> **Note:** This is being built. Some of the info here is made up dreams and fairy tales.
+
 # react-gettext-parser
 
 A gettext parser for React. Extracts translatable texts from components and spits it out into a .pot file.
@@ -31,7 +33,7 @@ parseFile('MyComponent.jsx', {
 });
 ```
 
-### Via Babel
+### Via [`babel-plugin-react-gettext-parser`](http://github.com/alexanderwallin)
 
 ```bash
 babel --plugins react-gettext-parser src
@@ -49,6 +51,16 @@ babel --plugins react-gettext-parser src
 }
 ```
 
+### In an npm script
+
+```js
+{
+  "scripts": {
+    "build:pot": "react-gettext-parser --target messages.pot 'src/**/*.js*'"
+  }
+}
+```
+
 ### As a gulp task
 
 ```js
@@ -61,16 +73,6 @@ gulp.task('build:pot', function() {
     }))
     .pipe(gulp.dest('translations'));
 });
-```
-
-### In an npm script
-
-```js
-{
-  "scripts": {
-    "build:pot": "react-gettext-parser --target messages.pot 'src/**/*.js*'"
-  }
-}
 ```
 
 ## Options
