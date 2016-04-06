@@ -5,9 +5,7 @@ import traverse from 'babel-traverse';
 import curry from 'lodash.curry';
 
 import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS } from './defaults';
-import { toPot } from './json2po';
 import { isGettextFuncCall, isGettextComponent } from './node-helpers';
-import { outputPot } from './io';
 import { mergeObjects, concatProp, uniquePropValue } from './utils';
 
 /**
@@ -83,8 +81,8 @@ export const getTraverser = (cb = () => {}, opts = {}) => {
         };
       },
 
-      exit(path, state) {
-        cb(getUniqueMessages(messages), state);
+      exit(path, state = {}) {
+        cb(getUniqueMessages(messages), { opts: (state.opts || opts) });
       },
     },
 
@@ -143,20 +141,10 @@ export const getTree = (code) =>
 
 export const parse = (code, opts = {}, cb = () => {}) => {
   const ast = getTree(code.toString('utf8'));
-  const traverser = getTraverser((messages) => {
-    const potContents = toPot(messages);
-    outputPot(opts.target, potContents, cb);
-  }, opts);
+  const traverser = getTraverser(cb, opts);
 
   traverse(ast, traverser);
 };
 
 export const parseFile = (file, opts = {}, cb = () => {}) =>
-  fs.readFile(file, 'utf8', (err, contents) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-
-    parse(contents, opts, cb);
-  });
+  parse(fs.readFileSync(file, 'utf8'), opts, cb);

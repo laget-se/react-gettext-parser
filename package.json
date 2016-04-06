@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "A gettext parser for React. Spits out .pot files!",
   "main": "lib/index.js",
+  "bin": "bin/react-gettext-parser.js",
   "files": [
     "lib"
   ],
@@ -39,8 +40,10 @@
     "babel-traverse": "^6.7.4",
     "babylon": "^6.7.0",
     "deep-extend": "^0.4.1",
+    "glob": "^7.0.3",
     "lodash.curry": "^4.0.1",
-    "lodash.uniq": "^4.2.1"
+    "lodash.uniq": "^4.2.1",
+    "yargs": "^4.4.0"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
