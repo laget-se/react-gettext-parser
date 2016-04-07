@@ -33,6 +33,7 @@ export const gulp = (opts = {}) => {
 
     if (file.isBuffer()) {
       const messages = getMessages(file._contents.toString('utf8'), {
+        ...options,
         filename: path.relative(process.cwd(), file.history[0]),
       });
 
