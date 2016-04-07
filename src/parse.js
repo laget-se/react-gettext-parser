@@ -7,7 +7,7 @@ import curry from 'lodash.curry';
 import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS } from './defaults';
 import { outputPot } from './io';
 import { toPot } from './json2pot';
-import { isGettextFuncCall, isGettextComponent, getFuncName } from './node-helpers';
+import { isGettextFuncCall, isGettextComponent, getFuncName, getJSXAttributeValue } from './node-helpers';
 import { mergeObjects, concatProp, uniquePropValue } from './utils';
 
 const noop = () => {};
@@ -35,7 +35,7 @@ export const getGettextMessageFromComponent = (propsMap, node) => {
 
   const propValues = node.attributes
     .filter(attr => gettextPropNames.indexOf(attr.name.name) !== -1)
-    .reduce((props, attr) => ({ ...props, [attr.name.name]: attr.value.value }), {});
+    .reduce((props, attr) => ({ ...props, [attr.name.name]: getJSXAttributeValue(attr) }), {});
 
   return Object.keys(propValues)
     .reduce((message, propName) => ({

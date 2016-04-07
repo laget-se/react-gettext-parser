@@ -10,3 +10,6 @@ export const isGettextComponent = (names, node) =>
 
 export const getFuncName = node =>
   (node.callee.object ? node.callee.property.name : node.callee.name);
+
+export const getJSXAttributeValue = attr =>
+  (attr.value.expression ? attr.value.expression.value : attr.value.value);
