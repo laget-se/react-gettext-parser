@@ -167,6 +167,16 @@ export const extractMessagesFromFile = (file, opts = {}) =>
   });
 
 /**
+ * Parses and returns extracted messages from all files matching a glob
+ */
+export const extractMessagesFromGlob = (globStr, opts = {}) => {
+  const messages = glob.sync(globStr)
+    .reduce((all, file) => all.concat(extractMessagesFromFile(file, opts)), []);
+
+  return getUniqueMessages(messages);
+};
+
+/**
  * Parses a string for gettext messages and writes them to a .pot file
  */
 export const parse = (code, opts = {}, cb = noop) => {
@@ -185,9 +195,5 @@ export const parseFile = (file, opts = {}, cb = noop) =>
  * Parses all files matching a glob and extract messages from all of them,
  * then writing them to a .pot file
  */
-export const parseGlob = (globStr, opts = {}, cb = noop) => {
-  const messages = glob.sync(globStr)
-    .reduce((all, file) => all.concat(extractMessagesFromFile(file, opts)), []);
-
-  outputPot(opts.target, toPot(getUniqueMessages(messages)), cb);
-};
+export const parseGlob = (globStr, opts = {}, cb = noop) =>
+  outputPot(opts.target, toPot(extractMessagesFromGlob(globStr, opts)), cb);
