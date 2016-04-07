@@ -140,13 +140,13 @@ export const getTraverser = (cb = noop, opts = {}) => {
   };
 };
 
-export const getTree = (code) =>
-  babylon.parse(code, BABEL_PARSING_OPTS);
-
+/**
+ * Parses and returns extracted messages from a js contents
+ */
 export const extractMessages = (code, opts = {}) => {
   let messages = [];
 
-  const ast = getTree(code.toString('utf8'));
+  const ast = babylon.parse(code.toString('utf8'), BABEL_PARSING_OPTS);
   const traverser = getTraverser(_messages => {
     messages = _messages;
   }, opts);
@@ -173,5 +173,9 @@ export const parse = (code, opts = {}, cb = noop) => {
   outputPot(opts.target, toPot(messages), cb);
 };
 
+/**
+ * Parses a file at a given path for gettext messages and writes them
+ * to a .pot file
+ */
 export const parseFile = (file, opts = {}, cb = noop) =>
   parse(fs.readFileSync(file, 'utf8'), opts, cb);
