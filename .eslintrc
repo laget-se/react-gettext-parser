@@ -6,7 +6,8 @@
     "quote-props": [2, "consistent-as-needed"],
     "max-len": [2, 120, 2, {"ignoreUrls": true}],
     "no-console": 0,
-    "no-param-reassign": ["error", { "props": false }]
+    "no-param-reassign": ["error", { "props": false }],
+    "no-unused-vars": [2, {"varsIgnorePattern": "colors"}]
   },
   "parserOptions": {
     "ecmaVersion": 6,

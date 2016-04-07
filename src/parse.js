@@ -5,6 +5,8 @@ import traverse from 'babel-traverse';
 import curry from 'lodash.curry';
 
 import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS } from './defaults';
+import { outputPot } from './io';
+import { toPot } from './json2pot';
 import { isGettextFuncCall, isGettextComponent } from './node-helpers';
 import { mergeObjects, concatProp, uniquePropValue } from './utils';
 
@@ -155,10 +157,8 @@ export const getMessages = (code, opts = {}) => {
 };
 
 export const parse = (code, opts = {}, cb = () => {}) => {
-  const ast = getTree(code.toString('utf8'));
-  const traverser = getTraverser(cb, opts);
-
-  traverse(ast, traverser);
+  const messages = getMessages(code);
+  outputPot(opts.target, toPot(messages), cb);
 };
 
 export const parseFile = (file, opts = {}, cb = () => {}) =>
