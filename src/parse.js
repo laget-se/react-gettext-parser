@@ -7,7 +7,7 @@ import curry from 'lodash.curry';
 import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS } from './defaults';
 import { outputPot } from './io';
 import { toPot } from './json2pot';
-import { isGettextFuncCall, isGettextComponent } from './node-helpers';
+import { isGettextFuncCall, isGettextComponent, getFuncName } from './node-helpers';
 import { mergeObjects, concatProp, uniquePropValue } from './utils';
 
 const noop = () => {};
@@ -17,7 +17,7 @@ const noop = () => {};
  * a CallExpression node
  */
 export const getGettextMessageFromFuncCall = (argsMap, node) => {
-  const mappedArgs = argsMap[node.callee.name];
+  const mappedArgs = argsMap[getFuncName(node)];
 
   return mappedArgs
     .map((arg, i) => (arg ? { [arg]: node.arguments[i].value } : null))
