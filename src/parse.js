@@ -156,6 +156,18 @@ export const extractMessages = (code, opts = {}) => {
   return messages;
 };
 
+/**
+ * Parses and returns extracted messages from a file at a given path
+ */
+export const extractMessagesFromFile = (file, opts = {}) =>
+  extractMessages(fs.readFileSync(file, 'utf8'), {
+    ...opts,
+    filename: file,
+  });
+
+/**
+ * Parses a string for gettext messages and writes them to a .pot file
+ */
 export const parse = (code, opts = {}, cb = noop) => {
   const messages = extractMessages(code);
   outputPot(opts.target, toPot(messages), cb);

@@ -4,7 +4,7 @@ import path from 'path';
 import glob from 'glob';
 import colors from 'colors';
 
-import { extractMessages, getUniqueMessages } from './parse';
+import { extractMessagesFromFile, getUniqueMessages } from './parse';
 import { toPot } from './json2pot';
 import { outputPot } from './io';
 
@@ -38,13 +38,7 @@ glob(filesGlob, (err, files) => {
   }
 
   files.forEach(file => {
-    const code = fs.readFileSync(file, 'utf8');
-    const fileOpts = {
-      ...opts,
-      filename: file,
-    };
-    const messages = extractMessages(code, fileOpts);
-    allMessages = [...messages];
+    allMessages = allMessages.concat(extractMessagesFromFile(file, opts))
   });
 
   const mergedMessages = getUniqueMessages(allMessages);
