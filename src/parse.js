@@ -72,7 +72,7 @@ export const getUniqueMessages = messages =>
 /**
  * Traverser
  */
-export const getTraverser = (cb = () => {}, opts = {}) => {
+export const getTraverser = (cb = noop, opts = {}) => {
   const messages = [];
 
   return {
@@ -156,10 +156,10 @@ export const getMessages = (code, opts = {}) => {
   return messages;
 };
 
-export const parse = (code, opts = {}, cb = () => {}) => {
+export const parse = (code, opts = {}, cb = noop) => {
   const messages = getMessages(code);
   outputPot(opts.target, toPot(messages), cb);
 };
 
-export const parseFile = (file, opts = {}, cb = () => {}) =>
+export const parseFile = (file, opts = {}, cb = noop) =>
   parse(fs.readFileSync(file, 'utf8'), opts, cb);
