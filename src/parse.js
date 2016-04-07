@@ -96,7 +96,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
      */
     JSXOpeningElement: {
       enter(path, state = {}) {
-        const { node } = path;
+        const { node, parent } = path;
         const envOpts = state.opts || opts;
         const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
 
@@ -104,7 +104,39 @@ export const getTraverser = (cb = noop, opts = {}) => {
           return;
         }
 
+        if (parent.children.length > 0) {
+          return;
+        }
+
         const message = getGettextMessageFromComponent(propsMap, node);
+
+        if (envOpts.filename) {
+          message.sources = [`${envOpts.filename}:${node.loc.start.line}`];
+        }
+
+        messages.push(message);
+      },
+    },
+
+    /**
+     * React component inline text
+     */
+    JSXText: {
+      enter(path, state = {}) {
+        const { node, parent } = path;
+        const envOpts = state.opts || opts;
+        const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
+
+        if (isGettextComponent(Object.keys(propsMap), parent.openingElement) === false) {
+          return;
+        }
+
+        if (node.value.trim() === '') {
+          return;
+        }
+
+        const message = getGettextMessageFromComponent(propsMap, parent.openingElement);
+        message.msgid = node.value;
 
         if (envOpts.filename) {
           message.sources = [`${envOpts.filename}:${node.loc.start.line}`];
