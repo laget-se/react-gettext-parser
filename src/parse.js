@@ -143,7 +143,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
 export const getTree = (code) =>
   babylon.parse(code, BABEL_PARSING_OPTS);
 
-export const getMessages = (code, opts = {}) => {
+export const extractMessages = (code, opts = {}) => {
   let messages = [];
 
   const ast = getTree(code.toString('utf8'));
@@ -157,7 +157,7 @@ export const getMessages = (code, opts = {}) => {
 };
 
 export const parse = (code, opts = {}, cb = noop) => {
-  const messages = getMessages(code);
+  const messages = extractMessages(code);
   outputPot(opts.target, toPot(messages), cb);
 };
 

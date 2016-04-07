@@ -4,7 +4,7 @@ import path from 'path';
 import glob from 'glob';
 import colors from 'colors';
 
-import { getMessages, getUniqueMessages } from './parse';
+import { extractMessages, getUniqueMessages } from './parse';
 import { toPot } from './json2pot';
 import { outputPot } from './io';
 
@@ -43,7 +43,7 @@ glob(filesGlob, (err, files) => {
       ...opts,
       filename: file,
     };
-    const messages = getMessages(code, fileOpts);
+    const messages = extractMessages(code, fileOpts);
     allMessages = [...messages];
   });
 

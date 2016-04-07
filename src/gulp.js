@@ -5,7 +5,7 @@ import { File, PluginError } from 'gulp-util';
 import colors from 'colors';
 
 import { toPot } from './json2pot';
-import { getMessages } from './parse';
+import { extractMessages } from './parse';
 
 const GULP_OPTS = {
   target: 'messages.pot',
@@ -32,7 +32,7 @@ export const gulp = (opts = {}) => {
     }
 
     if (file.isBuffer()) {
-      const messages = getMessages(file._contents.toString('utf8'), {
+      const messages = extractMessages(file._contents.toString('utf8'), {
         ...options,
         filename: path.relative(process.cwd(), file.history[0]),
       });
