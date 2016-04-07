@@ -8,6 +8,8 @@ import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS 
 import { isGettextFuncCall, isGettextComponent } from './node-helpers';
 import { mergeObjects, concatProp, uniquePropValue } from './utils';
 
+const noop = () => {};
+
 /**
  * Returns a gettext message given a mapping of args to gettext props and
  * a CallExpression node
@@ -138,6 +140,19 @@ export const getTraverser = (cb = () => {}, opts = {}) => {
 
 export const getTree = (code) =>
   babylon.parse(code, BABEL_PARSING_OPTS);
+
+export const getMessages = (code, opts = {}) => {
+  let messages = [];
+
+  const ast = getTree(code.toString('utf8'));
+  const traverser = getTraverser(_messages => {
+    messages = _messages;
+  }, opts);
+
+  traverse(ast, traverser);
+
+  return messages;
+};
 
 export const parse = (code, opts = {}, cb = () => {}) => {
   const ast = getTree(code.toString('utf8'));
