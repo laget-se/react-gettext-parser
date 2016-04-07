@@ -1,12 +1,8 @@
 
-import fs from 'fs';
 import path from 'path';
-import glob from 'glob';
 import colors from 'colors';
 
-import { extractMessagesFromFile, getUniqueMessages } from './parse';
-import { toPot } from './json2pot';
-import { outputPot } from './io';
+import { parseGlob } from './parse';
 
 const args = require('yargs')
   .help('h')
@@ -29,21 +25,4 @@ if (args.config) {
   opts = { ...opts, ...configs };
 }
 
-glob(filesGlob, (err, files) => {
-  let allMessages = [];
-
-  if (err) {
-    console.log('An error occured while fetching list of files:'.red, err);
-    process.exit(1);
-  }
-
-  files.forEach(file => {
-    allMessages = allMessages.concat(extractMessagesFromFile(file, opts))
-  });
-
-  const mergedMessages = getUniqueMessages(allMessages);
-  const potContents = toPot(mergedMessages);
-  outputPot(opts.target, potContents, () => {
-    console.log('Done!');
-  });
-});
+parseGlob(filesGlob, opts);

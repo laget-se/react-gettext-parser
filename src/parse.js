@@ -3,6 +3,7 @@ import fs from 'fs';
 import * as babylon from 'babylon';
 import traverse from 'babel-traverse';
 import curry from 'lodash.curry';
+import glob from 'glob';
 
 import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS } from './defaults';
 import { outputPot } from './io';
@@ -179,3 +180,14 @@ export const parse = (code, opts = {}, cb = noop) => {
  */
 export const parseFile = (file, opts = {}, cb = noop) =>
   parse(fs.readFileSync(file, 'utf8'), opts, cb);
+
+/**
+ * Parses all files matching a glob and extract messages from all of them,
+ * then writing them to a .pot file
+ */
+export const parseGlob = (globStr, opts = {}, cb = noop) => {
+  const messages = glob.sync(globStr)
+    .reduce((all, file) => all.concat(extractMessagesFromFile(file, opts)), []);
+
+  outputPot(opts.target, toPot(getUniqueMessages(messages)), cb);
+};
