@@ -1,8 +1,14 @@
-> **Note:** This is being built. Some of the info here is made up dreams and fairy tales.
-
 # react-gettext-parser
 
-A gettext parser for React. Extracts translatable texts from components and spits it out into a .pot file.
+A gettext parser for React.
+
+Extracts translatable texts from components and provides the following features:
+
+* Get a list of messages in JSON format
+* Get .pot contents as a string
+* Write directly to a .pot file
+
+It can be used directly in JavaScript, in gulp, via babel and as a standalone CLI utility to be used in npm scripts.
 
 ## Problem
 
@@ -20,16 +26,24 @@ A gettext parser for React. Extracts translatable texts from components and spit
 ### Using the CLI
 
 ```bash
-react-gettext-parser --target messages.pot 'src/**/*.js*'
+react-gettext-parser --config path/to/config.js --target messages.pot 'src/**/{*.js,*.jsx}'
 ```
 
 ### Using the API
 
 ```js
-import { parseFile } from 'react-gettext-parser';
+// Node script somewhere
+import fs from 'fs';
+import { getMessages, parseFile } from 'react-gettext-parser';
 
-parseFile('MyComponent.jsx', {
-  target: 'messages.pot',
+// Get array of message objects
+const messages = getMessages(fs.readFileSync('MyComponent.jsx'), {
+  filename: 'MyComponent.jsx'
+});
+
+// Parse a file and put it into a pot file
+parseFile('MyComponent.jsx', { target: 'messages.pot' }, () => {
+  // Done!
 });
 ```
 
@@ -56,7 +70,7 @@ babel --plugins react-gettext-parser src
 ```js
 {
   "scripts": {
-    "build:pot": "react-gettext-parser --target messages.pot 'src/**/*.js*'"
+    "build:pot": "react-gettext-parser --config path/to/config.js --target messages.pot 'src/**/*.js*'"
   }
 }
 ```
@@ -70,6 +84,7 @@ gulp.task('build:pot', function() {
   return gulp.src('src/**/*.js*')
     .pipe(reactGettextParser({
       target: 'messages.pot',
+      // ...more options
     }))
     .pipe(gulp.dest('translations'));
 });
