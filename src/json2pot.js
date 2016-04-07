@@ -14,7 +14,7 @@ export const GETTEXT_JSON_OPTS = {
   },
 };
 
-const GENERATED_INFO = `#\n# Generated using json2po\n#`;
+const GENERATED_INFO = `#\n# Generated using json2pot\n#`;
 
 export const toTitleSnakeCase = str =>
   str.replace(/([^\w]|^)([\w])/g, x => x.toUpperCase());
