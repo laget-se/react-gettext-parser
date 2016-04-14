@@ -18,7 +18,7 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 ### Using the CLI
 
 ```bash
-react-gettext-parser --config path/to/config.js --target messages.pot 'src/**/{*.js,*.jsx}'
+react-gettext-parser --config path/to/config.js --output messages.pot 'src/**/{*.js,*.jsx}'
 ```
 
 ### Using the API
@@ -29,7 +29,7 @@ react-gettext-parser --config path/to/config.js --target messages.pot 'src/**/{*
 import { parseFile } from 'react-gettext-parser';
 
 // Parse a file and put it into a pot file
-parseFile('MyComponent.jsx', { target: 'messages.pot' }, () => {
+parseFile('MyComponent.jsx', { output: 'messages.pot' }, () => {
   // Done!
 });
 
@@ -79,7 +79,7 @@ babel --plugins react-gettext-parser src
 ```js
 {
   "scripts": {
-    "build:pot": "react-gettext-parser --config path/to/config.js --target messages.pot 'src/**/*.js*'"
+    "build:pot": "react-gettext-parser --config path/to/config.js --output messages.pot 'src/**/*.js*'"
   }
 }
 ```
@@ -92,7 +92,7 @@ var reactGettextParser = require('react-gettext-parser').gulp;
 gulp.task('build:pot', function() {
   return gulp.src('src/**/*.js*')
     .pipe(reactGettextParser({
-      target: 'messages.pot',
+      output: 'messages.pot',
       // ...more options
     }))
     .pipe(gulp.dest('translations'));
@@ -101,7 +101,7 @@ gulp.task('build:pot', function() {
 
 ## Options
 
-#### `target`
+#### `output`
 
 The destination path for the .pot file.
 
