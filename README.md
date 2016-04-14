@@ -6,9 +6,11 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 
 ## Features
 
-* Map component names and properties to gettext variables
-* Map function names and arguments to gettext variables
+* Extracts translatable strings from JSX and JavaScript (obsviously)
+* Maps component names and properties to gettext variables (configurable)
+* Maps function names and arguments to gettext variables (configurable)
 * Merges identical strings found in separate files and concatenates their references
+* Writes .pot content the a specified output file
 * Supports globs
 
 ## Usage
@@ -22,19 +24,36 @@ react-gettext-parser --config path/to/config.js --target messages.pot 'src/**/{*
 ### Using the API
 
 ```js
-// Node script somewhere
+// Script somewhere
+
+import { parseFile } from 'react-gettext-parser';
+
+// Parse a file and put it into a pot file
+parseFile('MyComponent.jsx', { target: 'messages.pot' }, () => {
+  // Done!
+});
+
+// You can also get extracted strings as a list of message objects 
 import fs from 'fs';
-import { getMessages, parseFile } from 'react-gettext-parser';
+import { getMessages } from 'react-gettext-parser';
 
 // Get array of message objects
 const messages = getMessages(fs.readFileSync('MyComponent.jsx'), {
   filename: 'MyComponent.jsx'
 });
 
-// Parse a file and put it into a pot file
-parseFile('MyComponent.jsx', { target: 'messages.pot' }, () => {
-  // Done!
-});
+/*
+Results in something like:
+
+[
+  {
+    comment: "A comment to translators",
+    sources: ["MyComponent.jsx:13"],
+    msgid: "Translate me"
+  },
+  // And so on...
+]
+*/
 ```
 
 ### Via [`babel-plugin-react-gettext-parser`](http://github.com/alexanderwallin)
