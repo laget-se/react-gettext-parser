@@ -1,25 +1,15 @@
 # react-gettext-parser
 
-A gettext parser for React.
+A gettext utility that extract translatable strings from JSX (and regular JavaScript) and puts them into a .pot file. It uses the [babylon](https://github.com/babel/babylon) AST parser.
 
-Extracts translatable texts from components and provides the following features:
-
-* Get a list of messages in JSON format
-* Get .pot contents as a string
-* Write directly to a .pot file
-
-It can be used directly in JavaScript, in gulp, via babel and as a standalone CLI utility to be used in npm scripts.
-
-## Problem
-
-...
+It can be used directly in JavaScript, in gulp, [via babel](https://github.com/alexanderwallin/babel-plugin-react-gettext-parser) or as a standalone CLI utility to be used in the terminal or from npm scripts.
 
 ## Features
 
-* Parses anything that Babel does
 * Map component names and properties to gettext variables
 * Map function names and arguments to gettext variables
-* Available as a regular JavaScript object, a CLI utility, Babel plugin and Gulp task
+* Merges identical strings found in separate files and concatenates their references
+* Supports globs
 
 ## Usage
 
@@ -98,6 +88,10 @@ The destination path for the .pot file.
 
 #### `componentPropsMap`
 
+A two-level object of prop-to-gettext mappings.
+
+The defaults are:
+
 ```js
 {
   GetText: {
@@ -111,7 +105,7 @@ The destination path for the .pot file.
 
 The above would make this component...
 
-```jsx
+```js
 // MyComponent.jsx
 <GetText
   message="One item" 
@@ -124,17 +118,23 @@ The above would make this component...
 
 ...would result in the following translation definition:
 
-```gettext
+```pot
 # The number of items added to the cart
 #: MyComponent.jsx:2
 msgctxt "Cart"
 msgid "One item"
 msgid_plural "{{ count }} items"
+msgstr[0] ""
+msgstr[1] ""
 ```
 
 #### `funcArgumentsMap`
 
-```
+An object of function names and corresponding arrays of strings that matches arguments against gettext variables.
+
+Defaults:
+
+```js
 {
   gettext: ['msgid'],
   dgettext: [null, 'msgid'],
@@ -147,9 +147,25 @@ msgid_plural "{{ count }} items"
 }
 ```
 
-## Known issues
+This configs means that this...
 
-* Inline texts inside components are not extracted
+```js
+// Menu.jsx
+<Link to="/inboxes">
+  { npgettext('Menu', 'Inbox', 'Inboxes') }
+</Link>
+```
+
+...would result in the following translation definition:
+
+```pot
+#: Menu.jsx:13
+msgctxt "Menu"
+msgid "Inbox"
+msgid_plural "Inboxes"
+msgstr[0] ""
+msgstr[1] ""
+```
 
 ## Developing
 
