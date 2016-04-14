@@ -8,7 +8,7 @@ import { toPot } from './json2pot';
 import { extractMessages } from './parse';
 
 const GULP_OPTS = {
-  target: 'messages.pot',
+  output: 'messages.pot',
 };
 
 export const gulp = (opts = {}) => {
@@ -48,13 +48,13 @@ export const gulp = (opts = {}) => {
   function write(cb) {
     const potFile = new File({
       base: process.cwd(),
-      path: options.target,
+      path: options.output,
       contents: new Buffer(toPot(allMessages)),
     });
 
     this.push(potFile);
 
-    console.log(`Writing .pot file to ${options.target}`.green);
+    console.log(`Writing .pot file to ${options.output}`.green);
 
     cb();
   }
