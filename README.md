@@ -183,10 +183,22 @@ msgstr[1] ""
 
 ## Developing
 
-```bash
-npm i && npm run dev
-npm run lint
-npm run build
+Get `react-gettext-parser` up and running:
+
+```sh
+npm i && npm run build && npm link
+```
+
+Running the Mocha test suite:
+
+```sh
+npm test
+```
+
+Dev mode, running `build` in watch mode:
+
+```sh
+npm run dev
 ```
 
 ## License
