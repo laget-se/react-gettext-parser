@@ -35,10 +35,10 @@ parseFile('MyComponent.jsx', { output: 'messages.pot' }, () => {
 
 // You can also get extracted strings as a list of message objects 
 import fs from 'fs';
-import { getMessages } from 'react-gettext-parser';
+import { extractMessages } from 'react-gettext-parser';
 
 // Get array of message objects
-const messages = getMessages(fs.readFileSync('MyComponent.jsx'), {
+const messages = extractMessages(fs.readFileSync('MyComponent.jsx'), {
   filename: 'MyComponent.jsx'
 });
 
