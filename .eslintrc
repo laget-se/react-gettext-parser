@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "extends": ["airbnb/base"],
+  "extends": ["airbnb"],
   "rules": {
     "brace-style": [2, "stroustrup"],
     "quote-props": [2, "consistent-as-needed"],
