@@ -26,21 +26,16 @@ react-gettext-parser --config path/to/config.js --output messages.pot 'src/**/{*
 ```js
 // Script somewhere
 
-import { parseFile } from 'react-gettext-parser';
+import { parseGlob } from 'react-gettext-parser';
 
 // Parse a file and put it into a pot file
-parseFile('MyComponent.jsx', { output: 'messages.pot' }, () => {
+parseGlob('src/**/*.js', { output: 'messages.pot' }, () => {
   // Done!
 });
 
-// You can also get extracted strings as a list of message objects 
-import fs from 'fs';
-import { extractMessages } from 'react-gettext-parser';
-
-// Get array of message objects
-const messages = extractMessages(fs.readFileSync('MyComponent.jsx'), {
-  filename: 'MyComponent.jsx'
-});
+// You can also get extracted strings as a list of message objects
+import { extractMessagesFromGlob } from 'react-gettext-parser';
+const messages = extractMessagesFromGlob('src/**/*.js');
 
 /*
 Results in something like:
