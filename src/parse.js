@@ -186,7 +186,7 @@ export const extractMessages = (code, opts = {}) => {
 
   traverse(ast, traverser);
 
-  return messages;
+  return [];
 };
 
 /**
