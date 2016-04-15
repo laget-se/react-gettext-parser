@@ -100,7 +100,7 @@ gulp.task('build:pot', function() {
 
 #### `output`
 
-The destination path for the .pot file.
+The destination path for the .pot file. If omitted, the .pot output will be logged to the console.
 
 #### `componentPropsMap`
 
