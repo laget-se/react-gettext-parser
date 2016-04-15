@@ -2,6 +2,10 @@
   "name": "react-gettext-parser",
   "version": "0.1.0",
   "description": "A gettext parser for React. Spits out .pot files!",
+  "engines": {
+    "node": ">=4.0.0",
+    "npm": ">=3.0.0"
+  },
   "main": "lib/index.js",
   "bin": "bin/react-gettext-parser.js",
   "files": [
