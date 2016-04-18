@@ -9,6 +9,7 @@
   "main": "lib/index.js",
   "bin": "bin/react-gettext-parser.js",
   "files": [
+    "bin",
     "lib"
   ],
   "scripts": {
