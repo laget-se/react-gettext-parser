@@ -102,15 +102,27 @@ gulp.task('build:pot', function() {
 
 #### `extractMessages(codeStr, [options])`
 
+Parses a string with JS(X) source code for translatable strings and returns a list of message objects.
+
 #### `extractMessagesFromFile(filePath, [options])`
+
+Parses a JS(X) file for translatable strings and returns a list of message objects.
 
 #### `extractMessagesFromGlob(globStr, [options])`
 
+Parses JS(X) files matching a glob for translatable strings and returns a list of message objects.
+
 #### `parse(code, [options], [callback])`
+
+Parses a string with JS(X) source code for translatable strings and writes a .pot file containing those strings.
 
 #### `parseFile(filePath, [options], [callback])`
 
+Parses a JS(X) file for translatable strings and writes a .pot file containing those strings.
+
 #### `parseGlob(globStr, [options], [callback])`
+
+Parses JS(X) files matching a glob for translatable strings and writes a .pot file containing those strings.
 
 ### Converting messages to a POT string
 
@@ -118,7 +130,11 @@ gulp.task('build:pot', function() {
 
 ### Writing POT contents to file
 
+Converts an array of message objects into a POT string.
+
 #### `outputPot(filePath, contents, [callback])`
+
+Writes `contents` to `filePath` if `filePath` is truthy, i.e. a string. If `filePath` is falsy, `contents` is logged to the console.
 
 ## Options
 
