@@ -96,6 +96,30 @@ gulp.task('build:pot', function() {
 });
 ```
 
+## API
+
+### Extracting strings
+
+#### `extractMessages(codeStr, [options])`
+
+#### `extractMessagesFromFile(filePath, [options])`
+
+#### `extractMessagesFromGlob(globStr, [options])`
+
+#### `parse(code, [options], [callback])`
+
+#### `parseFile(filePath, [options], [callback])`
+
+#### `parseGlob(globStr, [options], [callback])`
+
+### Converting messages to a POT string
+
+#### `toPot(messages)`
+
+### Writing POT contents to file
+
+#### `outputPot(filePath, contents, [callback])`
+
 ## Options
 
 #### `output`
