@@ -156,7 +156,7 @@ The above would make this component...
 />
 ```
 
-...would result in the following translation definition:
+...would result in the following translation block:
 
 ```pot
 # The number of items added to the cart
@@ -196,7 +196,7 @@ This configs means that this...
 </Link>
 ```
 
-...would result in the following translation definition:
+...would result in the following translation block:
 
 ```pot
 #: Menu.jsx:13
