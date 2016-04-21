@@ -117,7 +117,7 @@ export const getUniqueBlocks = blocks =>
  * to each visitor, hence the `state.opts || opts`.
  */
 export const getTraverser = (cb = noop, opts = {}) => {
-  const messages = [];
+  const blocks = [];
 
   return {
     Program: {
@@ -130,7 +130,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
       },
 
       exit(path, state = {}) {
-        cb(getUniqueBlocks(messages), { opts: (state.opts || opts) });
+        cb(getUniqueBlocks(blocks), { opts: (state.opts || opts) });
       },
     },
 
@@ -159,7 +159,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
           block.comments.reference = [`${envOpts.filename}:${node.loc.start.line}`];
         }
 
-        messages.push(block);
+        blocks.push(block);
       },
     },
 
@@ -189,7 +189,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
           block.comments.reference = [`${envOpts.filename}:${node.loc.start.line}`];
         }
 
-        messages.push(block);
+        blocks.push(block);
       },
     },
 
@@ -221,30 +221,30 @@ export const getTraverser = (cb = noop, opts = {}) => {
           block.comments.reference = [`${envOpts.filename}:${node.loc.start.line}`];
         }
 
-        messages.push(block);
+        blocks.push(block);
       },
     },
   };
 };
 
 /**
- * Parses and returns extracted messages from a js contents
+ * Parses and returns extracted gettext blocks from a js contents
  */
 export const extractMessages = (code, opts = {}) => {
-  let messages = [];
+  let blocks = [];
 
   const ast = babylon.parse(code.toString('utf8'), BABEL_PARSING_OPTS);
-  const traverser = getTraverser(_messages => {
-    messages = _messages;
+  const traverser = getTraverser(_blocks => {
+    blocks = _blocks;
   }, opts);
 
   traverse(ast, traverser);
 
-  return messages;
+  return blocks;
 };
 
 /**
- * Parses and returns extracted messages from a file at a given path
+ * Parses and returns extracted gettext blocks from a file at a given path
  */
 export const extractMessagesFromFile = (file, opts = {}) =>
   extractMessages(fs.readFileSync(file, 'utf8'), {
@@ -253,32 +253,32 @@ export const extractMessagesFromFile = (file, opts = {}) =>
   });
 
 /**
- * Parses and returns extracted messages from all files matching a glob
+ * Parses and returns extracted gettext blocks from all files matching a glob
  */
 export const extractMessagesFromGlob = (globStr, opts = {}) => {
-  const messages = glob.sync(globStr)
+  const blocks = glob.sync(globStr)
     .reduce((all, file) => all.concat(extractMessagesFromFile(file, opts)), []);
 
-  return getUniqueBlocks(messages);
+  return getUniqueBlocks(blocks);
 };
 
 /**
- * Parses a string for gettext messages and writes them to a .pot file
+ * Parses a string for gettext blocks and writes them to a .pot file
  */
 export const parse = (code, opts = {}, cb = noop) => {
-  const messages = extractMessages(code);
-  outputPot(opts.output, toPot(messages), cb);
+  const blocks = extractMessages(code);
+  outputPot(opts.output, toPot(blocks), cb);
 };
 
 /**
- * Parses a file at a given path for gettext messages and writes them
+ * Parses a file at a given path for gettext blocks and writes them
  * to a .pot file
  */
 export const parseFile = (file, opts = {}, cb = noop) =>
   parse(fs.readFileSync(file, 'utf8'), opts, cb);
 
 /**
- * Parses all files matching a glob and extract messages from all of them,
+ * Parses all files matching a glob and extract blocks from all of them,
  * then writing them to a .pot file
  */
 export const parseGlob = (globStr, opts = {}, cb = noop) =>
