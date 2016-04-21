@@ -2,10 +2,27 @@
 import { po } from 'gettext-parser';
 import groupBy from 'lodash.groupby';
 
-const createTranslationsTable = (blocks) => {
-  const groupedBlocks = groupBy(blocks, b => b.msgctx || '');
+/**
+ * Creates a gettext-parser/node-gettext compatible JSON PO(T)
+ * structure from a list of gettext blocks.
+ */
+const createTranslationsTable = (blocks, headers = {}) => {
+  const translations = groupBy(blocks, b => b.msgctx || '');
+
+  // Hack
+  translations[''][''] = {
+    msgid: '',
+    msgstr: [''],
+  };
+
   return {
-    translations: groupedBlocks,
+    charset: headers.charset || 'utf-8',
+    headers: {
+      'content-type': headers['content-type'] || 'text/plain; charset=utf-8',
+      'pot-creation-date': new Date().toString(),
+      'content-transfer-encoding': headers['content-transfer-encoding'] || '8bit',
+    },
+    translations,
   };
 };
 
