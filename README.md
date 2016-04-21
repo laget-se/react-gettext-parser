@@ -42,9 +42,13 @@ Results in something like:
 
 [
   {
-    comment: "A comment to translators",
-    sources: ["MyComponent.jsx:13"],
+    msgctxt: "",
     msgid: "Translate me"
+    msgstr: [""],
+    comments: {
+      translator: ["A comment to translators"],
+      reference: ["MyComponent.jsx:13"]
+    }
   },
   // And so on...
 ]
