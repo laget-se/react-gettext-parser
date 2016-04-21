@@ -100,33 +100,49 @@ gulp.task('build:pot', function() {
 
 ### Extracting strings
 
-#### `extractMessages(codeStr, [options])`
+##### `extractMessages(codeStr, [options])`
 
-#### `extractMessagesFromFile(filePath, [options])`
+Parses a string with JS(X) source code for translatable strings and returns a list of message objects.
 
-#### `extractMessagesFromGlob(globStr, [options])`
+##### `extractMessagesFromFile(filePath, [options])`
 
-#### `parse(code, [options], [callback])`
+Parses a JS(X) file for translatable strings and returns a list of message objects.
 
-#### `parseFile(filePath, [options], [callback])`
+##### `extractMessagesFromGlob(globStr, [options])`
 
-#### `parseGlob(globStr, [options], [callback])`
+Parses JS(X) files matching a glob for translatable strings and returns a list of message objects.
+
+##### `parse(code, [options], [callback])`
+
+Parses a string with JS(X) source code for translatable strings and writes a .pot file containing those strings.
+
+##### `parseFile(filePath, [options], [callback])`
+
+Parses a JS(X) file for translatable strings and writes a .pot file containing those strings.
+
+##### `parseGlob(globStr, [options], [callback])`
+
+Parses JS(X) files matching a glob for translatable strings and writes a .pot file containing those strings.
 
 ### Converting messages to a POT string
 
-#### `toPot(messages)`
+##### `toPot(messages)`
 
 ### Writing POT contents to file
 
-#### `outputPot(filePath, contents, [callback])`
+Converts an array of message objects into a POT string.
+
+##### `outputPot(filePath, contents, [callback])`
+
+Writes `contents` to `filePath` if `filePath` is truthy, i.e. a string. If `filePath` is falsy, `contents` is logged to the console.
 
 ## Options
 
-#### `output`
+##### `output`
 
 The destination path for the .pot file. If omitted, the .pot output will be logged to the console.
 
-#### `componentPropsMap`
+##### `componentPropsMap`
 
 A two-level object of prop-to-gettext mappings.
 
@@ -168,7 +184,7 @@ msgstr[0] ""
 msgstr[1] ""
 ```
 
-#### `funcArgumentsMap`
+##### `funcArgumentsMap`
 
 An object of function names and corresponding arrays of strings that matches arguments against gettext variables.
 
