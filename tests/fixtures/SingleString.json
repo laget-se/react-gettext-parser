@@ -1,5 +1,10 @@
 [
   {
-    "msgid": "Translate me"
+    "msgctxt": "",
+    "msgid": "Translate me",
+    "comments": {
+      "reference": [],
+      "translator": []
+    }
   }
 ]

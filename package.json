@@ -46,9 +46,11 @@
     "babylon": "^6.7.0",
     "colors": "^1.1.2",
     "deep-extend": "^0.4.1",
+    "gettext-parser": "^1.1.2",
     "glob": "^7.0.3",
     "gulp-util": "^3.0.7",
     "lodash.curry": "^4.0.1",
+    "lodash.groupby": "^4.3.0",
     "lodash.uniq": "^4.2.1",
     "through2": "^2.0.1",
     "yargs": "^4.4.0"
@@ -62,6 +64,7 @@
     "eslint": "^2.7.0",
     "eslint-config-airbnb": "^6.2.0",
     "mocha": "^2.4.5",
-    "rimraf": "^2.5.2"
+    "rimraf": "^2.5.2",
+    "sinon": "^1.17.3"
   }
 }

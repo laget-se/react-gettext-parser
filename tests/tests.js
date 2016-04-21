@@ -1,6 +1,8 @@
 /* global describe it */
 
 import { assert, expect } from 'chai';
+import { spy } from 'sinon';
+import { po } from 'gettext-parser';
 import fs from 'fs';
 import path from 'path';
 
@@ -25,7 +27,7 @@ describe('react-gettext-parser', () => {
       const expected = getJson('SingleString.json');
 
       expect(messages).to.have.length(1);
-      expect(messages).to.deep.equal(expected);
+      expect(messages[0].msgid).to.equal(expected[0].msgid);
     });
 
     it('should extract a message from a js function call', () => {
@@ -35,7 +37,7 @@ describe('react-gettext-parser', () => {
       const expected = getJson('SingleString.json');
 
       expect(messages).to.have.length(1);
-      expect(messages).to.deep.equal(expected);
+      expect(messages[0].msgid).to.equal(expected[0].msgid);
     });
 
   });
@@ -69,38 +71,41 @@ describe('react-gettext-parser', () => {
     it('should merge two identical strings and concatenate references', () => {
       const messages = extractMessagesFromGlob('tests/fixtures/Merge{A,B}.jsx');
       expect(messages).to.have.length(1);
-
-      const message = messages[0];
-      expect(message.sources).to.have.length(2);
+      expect(messages[0].comments.reference).to.have.length(2);
     });
 
     it('should merge identical strings independant of jsx or js', () => {
       const messages = extractMessagesFromGlob('tests/fixtures/Merge{A,C}.jsx');
       expect(messages).to.have.length(1);
-
-      const message = messages[0];
-      expect(message.sources).to.have.length(2);
+      expect(messages[0].comments.reference).to.have.length(2);
     });
 
     it('should sort references alphabetically', () => {
       const messages = extractMessagesFromGlob('tests/fixtures/Merge*.jsx');
       expect(messages).to.have.length(1);
 
-      const message = messages[0];
-      expect(message.sources).to.have.length(3);
-      expect(message.sources[0]).to.contain('MergeA.jsx');
-      expect(message.sources[1]).to.contain('MergeB.jsx');
-      expect(message.sources[2]).to.contain('MergeC.jsx');
+      const references = messages[0].comments.reference;
+      expect(references).to.have.length(3);
+      expect(references[0]).to.contain('MergeA.jsx');
+      expect(references[1]).to.contain('MergeB.jsx');
+      expect(references[2]).to.contain('MergeC.jsx');
     });
 
   });
 
   describe('compiling to pot', () => {
 
-    it('should compile a json object into correct pot', () => {
+    it('should use gettext-parser', () => {
+      const compileSpy = spy(po, 'compile');
+      toPot(getJson('SingleString.json'));
+
+      expect(compileSpy.called).to.equal(true);
+    });
+
+    it('should spit out a pot file containing an extracted string', () => {
       const messages = getJson('SingleString.json');
       const pot = toPot(messages);
-      const relevantPot = pot.split('\n').slice(-4).join('\n');
+      const relevantPot = pot.split('\n\n').pop();
 
       const expected = getSource('SingleString.pot');
 

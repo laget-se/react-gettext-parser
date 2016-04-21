@@ -11,7 +11,7 @@ export const outputPot = (filePath, contents, cb = () => {}) => {
     console.log(contents);
   }
 
-  console.log(`Did write .pot contents to ${filePath.bold}`.green);
+  console.log(`Did write .pot contents to ${filePath}`.green);
 
   cb();
 };

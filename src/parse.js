@@ -3,34 +3,33 @@ import fs from 'fs';
 import * as babylon from 'babylon';
 import traverse from 'babel-traverse';
 import curry from 'lodash.curry';
+import uniq from 'lodash.uniq';
 import glob from 'glob';
 
 import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS } from './defaults';
 import { outputPot } from './io';
 import { toPot } from './json2pot';
 import { isGettextFuncCall, isGettextComponent, getFuncName, getJSXAttributeValue } from './node-helpers';
-import { mergeObjects, concatProp, uniquePropValue } from './utils';
 
 const noop = () => {};
 
-/**
- * Returns a gettext message given a mapping of args to gettext props and
- * a CallExpression node
- */
-export const getGettextMessageFromFuncCall = (argsMap, node) => {
-  const mappedArgs = argsMap[getFuncName(node)];
-
-  return mappedArgs
-    .map((arg, i) => (arg ? { [arg]: node.arguments[i].value } : null))
-    .filter(x => x)
-    .reduce(mergeObjects(), {});
+const getEmptyBlock = () => {
+  return {
+    msgctxt: '',
+    msgid: null,
+    msgstr: [''],
+    comments: {
+      reference: [],
+      translator: [],
+    },
+  };
 };
 
 /**
  * Returns a gettext message given a mapping of component props to gettext
  * props and a JSXOpeningElement node
  */
-export const getGettextMessageFromComponent = (propsMap, node) => {
+const getGettextBlockFromComponent = (propsMap, node) => {
   const componentPropsLookup = propsMap[node.name.name];
   const gettextPropNames = Object.keys(componentPropsLookup);
 
@@ -38,36 +37,69 @@ export const getGettextMessageFromComponent = (propsMap, node) => {
     .filter(attr => gettextPropNames.indexOf(attr.name.name) !== -1)
     .reduce((props, attr) => ({ ...props, [attr.name.name]: getJSXAttributeValue(attr) }), {});
 
-  return Object.keys(propValues)
-    .reduce((message, propName) => ({
-      ...message,
-      [componentPropsLookup[propName]]: propValues[propName],
-    }), {});
+  const block = Object.keys(propValues)
+    .reduce((currBlock, propName) => {
+      const gettextVar = componentPropsLookup[propName];
+      const value = propValues[propName];
+
+      if (gettextVar === 'msgid') {
+        currBlock.msgid = value;
+      }
+      else if (gettextVar === 'msgid_plural') {
+        currBlock.msgid_plural = value;
+        currBlock.msgstr = ['', ''];
+      }
+      else if (gettextVar === 'msgctxt') {
+        currBlock.msgctxt = value;
+      }
+      else if (gettextVar === 'comment') {
+        currBlock.comments.translator.push(value);
+      }
+
+      return currBlock;
+    }, getEmptyBlock());
+
+  return block;
 };
 
 /**
- * Returns whether two gettext messages are considered equal
+ * Returns whether two gettext blocks are considered equal
  */
-export const areMessagesEqual = curry((a, b) =>
-  (a.msgid === b.msgid && a.msgid_plural === b.msgid_plural && a.context === b.context)
+export const areBlocksEqual = curry((a, b) =>
+  (a.msgid === b.msgid && a.msgctxt === b.msgctxt)
 );
-
-// Helpers
-const concatSources = concatProp('sources');
-const uniqueSources = uniquePropValue('sources');
 
 /**
  * Takes a list of messages and returns a list with unique ones with the merged
  * messages concatenated
  */
-export const getUniqueMessages = messages =>
-  messages.reduce((unique, message) => {
-    const isEqualMessage = areMessagesEqual(message);
-    const existingMessage = unique.filter(x => isEqualMessage(x)).shift();
+export const getUniqueBlocks = blocks =>
+  blocks.reduce((unique, block) => {
+    const isEqualBlock = areBlocksEqual(block);
+    const existingBlock = unique.filter(x => isEqualBlock(x)).shift();
 
-    return existingMessage
-      ? unique.map(x => (isEqualMessage(x) ? uniqueSources(concatSources(x, message)) : x))
-      : unique.concat(message);
+    if (existingBlock) {
+
+      // Concatenate comments to translators
+      if (block.comments.translator.length > 0) {
+        existingBlock.comments.translator = uniq(existingBlock.comments.translator.concat(block.comments.translator));
+      }
+
+      // Concatenate source references
+      if (block.comments.reference.length > 0) {
+        existingBlock.comments.reference = uniq(existingBlock.comments.reference.concat(block.comments.reference)).sort();
+      }
+
+      // Add plural id and overwrite msgstr
+      if (block.msgid_plural) {
+        existingBlock.msgid_plural = block.msgid_plural;
+        existingBlock.msgstr = block.msgstr;
+      }
+
+      return unique.map(x =>  isEqualBlock(x) ? existingBlock : x);
+    }
+
+    return unique.concat(block);
   }, []);
 
 /**
@@ -87,7 +119,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
       },
 
       exit(path, state = {}) {
-        cb(getUniqueMessages(messages), { opts: (state.opts || opts) });
+        cb(getUniqueBlocks(messages), { opts: (state.opts || opts) });
       },
     },
 
@@ -108,13 +140,13 @@ export const getTraverser = (cb = noop, opts = {}) => {
           return;
         }
 
-        const message = getGettextMessageFromComponent(propsMap, node);
+        const block = getGettextBlockFromComponent(propsMap, node);
 
         if (envOpts.filename) {
-          message.sources = [`${envOpts.filename}:${node.loc.start.line}`];
+          block.comments.reference = [`${envOpts.filename}:${node.loc.start.line}`];
         }
 
-        messages.push(message);
+        messages.push(block);
       },
     },
 
@@ -135,14 +167,14 @@ export const getTraverser = (cb = noop, opts = {}) => {
           return;
         }
 
-        const message = getGettextMessageFromComponent(propsMap, parent.openingElement);
-        message.msgid = node.value;
+        const block = getGettextBlockFromComponent(propsMap, parent.openingElement);
+        block.msgid = node.value;
 
         if (envOpts.filename) {
-          message.sources = [`${envOpts.filename}:${node.loc.start.line}`];
+          block.comments.reference = [`${envOpts.filename}:${node.loc.start.line}`];
         }
 
-        messages.push(message);
+        messages.push(block);
       },
     },
 
@@ -161,13 +193,18 @@ export const getTraverser = (cb = noop, opts = {}) => {
           return;
         }
 
-        const message = getGettextMessageFromFuncCall(funcArgsMap, node);
+        const mappedArgs = funcArgsMap[getFuncName(node)];
+
+        const block = mappedArgs
+          .map((arg, i) => (arg ? { [arg]: node.arguments[i].value } : null))
+          .filter(x => x)
+          .reduce((a, b) => ({ ...a, ...b }), getEmptyBlock());
 
         if (envOpts.filename) {
-          message.sources = [`${envOpts.filename}:${node.loc.start.line}`];
+          block.comments.reference = [`${envOpts.filename}:${node.loc.start.line}`];
         }
 
-        messages.push(message);
+        messages.push(block);
       },
     },
   };
@@ -205,7 +242,7 @@ export const extractMessagesFromGlob = (globStr, opts = {}) => {
   const messages = glob.sync(globStr)
     .reduce((all, file) => all.concat(extractMessagesFromFile(file, opts)), []);
 
-  return getUniqueMessages(messages);
+  return getUniqueBlocks(messages);
 };
 
 /**
