@@ -26,7 +26,7 @@ const getEmptyBlock = () => {
 };
 
 /**
- * Returns a gettext message given a mapping of component props to gettext
+ * Returns a gettext block given a mapping of component props to gettext
  * props and a JSXOpeningElement node
  */
 const getGettextBlockFromComponent = (propsMap, node) => {
@@ -70,8 +70,9 @@ export const areBlocksEqual = curry((a, b) =>
 );
 
 /**
- * Takes a list of messages and returns a list with unique ones with the merged
- * messages concatenated
+ * Takes a list of blocks and returns a list with unique ones.
+ * Translator comments and source code reference comments are
+ * concatenated.
  */
 export const getUniqueBlocks = blocks =>
   blocks.reduce((unique, block) => {
@@ -104,6 +105,16 @@ export const getUniqueBlocks = blocks =>
 
 /**
  * Traverser
+ *
+ * The traverser is wrapped inside a function so that it can be used both
+ * by passing options manually and as a babel plugin.
+ *
+ * Options contain component and function mappings, as well as an optional
+ * filename, which is used to add source code reference comments to the
+ * pot file.
+ *
+ * Traversers in Babel plugins retrieves plugin options as a `state` argument
+ * to each visitor, hence the `state.opts || opts`.
  */
 export const getTraverser = (cb = noop, opts = {}) => {
   const messages = [];
@@ -124,7 +135,9 @@ export const getTraverser = (cb = noop, opts = {}) => {
     },
 
     /**
-     * React gettext components
+     * React gettext components, e.g.:
+     *
+     *  <GetText message="My string" comment="Some clarifying comment" />
      */
     JSXOpeningElement: {
       enter(path, state = {}) {
@@ -151,7 +164,9 @@ export const getTraverser = (cb = noop, opts = {}) => {
     },
 
     /**
-     * React component inline text
+     * React component inline text, e.g.:
+     *
+     *  <GetText>My string</GetText>
      */
     JSXText: {
       enter(path, state = {}) {
@@ -179,7 +194,9 @@ export const getTraverser = (cb = noop, opts = {}) => {
     },
 
     /**
-     * Gettext function calls
+     * Gettext function calls, e.g.:
+     *
+     *   ngettext('One item', '{{ count }} items');
      */
     CallExpression: {
       enter(path, state = {}) {
