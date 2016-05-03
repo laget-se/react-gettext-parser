@@ -4,7 +4,7 @@ import * as babylon from 'babylon';
 import traverse from 'babel-traverse';
 import curry from 'lodash.curry';
 import uniq from 'lodash.uniq';
-import glob from 'glob';
+import glob from 'glob-all';
 
 import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS } from './defaults';
 import { outputPot } from './io';
@@ -13,17 +13,15 @@ import { isGettextFuncCall, isGettextComponent, getFuncName, getJSXAttributeValu
 
 const noop = () => {};
 
-const getEmptyBlock = () => {
-  return {
-    msgctxt: '',
-    msgid: null,
-    msgstr: [''],
-    comments: {
-      reference: [],
-      translator: [],
-    },
-  };
-};
+const getEmptyBlock = () => ({
+  msgctxt: '',
+  msgid: null,
+  msgstr: [''],
+  comments: {
+    reference: [],
+    translator: [],
+  },
+});
 
 /**
  * Returns a gettext block given a mapping of component props to gettext
@@ -88,7 +86,8 @@ export const getUniqueBlocks = blocks =>
 
       // Concatenate source references
       if (block.comments.reference.length > 0) {
-        existingBlock.comments.reference = uniq(existingBlock.comments.reference.concat(block.comments.reference)).sort();
+        existingBlock.comments.reference = uniq(existingBlock.comments.reference
+                                           .concat(block.comments.reference)).sort();
       }
 
       // Add plural id and overwrite msgstr
@@ -97,7 +96,7 @@ export const getUniqueBlocks = blocks =>
         existingBlock.msgstr = block.msgstr;
       }
 
-      return unique.map(x =>  isEqualBlock(x) ? existingBlock : x);
+      return unique.map(x => (isEqualBlock(x) ? existingBlock : x));
     }
 
     return unique.concat(block);
@@ -196,7 +195,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
     /**
      * Gettext function calls, e.g.:
      *
-     *   ngettext('One item', '{{ count }} items');
+     * ngettext('One item', '{{ count }} items');
      */
     CallExpression: {
       enter(path, state = {}) {
@@ -213,14 +212,13 @@ export const getTraverser = (cb = noop, opts = {}) => {
         const mappedArgs = funcArgsMap[getFuncName(node)];
 
         const block = mappedArgs
-          .map((arg, i) => (arg ? { [arg]: node.arguments[i].value } : null))
+          .map((arg, i) => (arg && node.arguments[i] ? { [arg]: node.arguments[i].value } : null))
           .filter(x => x)
           .reduce((a, b) => ({ ...a, ...b }), getEmptyBlock());
 
         if (envOpts.filename) {
           block.comments.reference = [`${envOpts.filename}:${node.loc.start.line}`];
         }
-
         blocks.push(block);
       },
     },
@@ -246,17 +244,19 @@ export const extractMessages = (code, opts = {}) => {
 /**
  * Parses and returns extracted gettext blocks from a file at a given path
  */
-export const extractMessagesFromFile = (file, opts = {}) =>
-  extractMessages(fs.readFileSync(file, 'utf8'), {
+export const extractMessagesFromFile = (file, opts = {}) => {
+  return extractMessages(fs.readFileSync(file, 'utf8'), {
     ...opts,
     filename: file,
   });
+}
+
 
 /**
  * Parses and returns extracted gettext blocks from all files matching a glob
  */
-export const extractMessagesFromGlob = (globStr, opts = {}) => {
-  const blocks = glob.sync(globStr)
+export const extractMessagesFromGlob = (globArr, opts = {}) => {
+  const blocks = glob.sync(globArr)
     .reduce((all, file) => all.concat(extractMessagesFromFile(file, opts)), []);
 
   return getUniqueBlocks(blocks);
@@ -281,5 +281,5 @@ export const parseFile = (file, opts = {}, cb = noop) =>
  * Parses all files matching a glob and extract blocks from all of them,
  * then writing them to a .pot file
  */
-export const parseGlob = (globStr, opts = {}, cb = noop) =>
-  outputPot(opts.output, toPot(extractMessagesFromGlob(globStr, opts)), cb);
+export const parseGlob = (globArr, opts = {}, cb = noop) =>
+  outputPot(opts.output, toPot(extractMessagesFromGlob(globArr, opts)), cb);

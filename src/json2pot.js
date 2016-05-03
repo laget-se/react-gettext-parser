@@ -1,5 +1,5 @@
 
-import { po } from 'gettext-parser';
+import { po } from 'gettext-parser';
 import groupBy from 'lodash.groupby';
 
 /**
@@ -28,15 +28,13 @@ const createTranslationsTable = (blocks, headers = {}) => {
 };
 
 const convertCommentArraysToStrings = (blocks) =>
-  blocks.map(b => {
-    return {
-      ...b,
-      comments: {
-        reference: b.comments.reference.join('\n'),
-        translator: b.comments.translator.join('\n'),
-      },
-    };
-  });
+  blocks.map(b => ({
+    ...b,
+    comments: {
+      reference: b.comments.reference.join('\n'),
+      translator: b.comments.translator.join('\n'),
+    },
+  }));
 
 export const toPot = (blocks) => {
   const parsedBlocks = convertCommentArraysToStrings(blocks);
