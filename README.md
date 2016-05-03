@@ -18,7 +18,7 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 ### Using the CLI
 
 ```bash
-react-gettext-parser --config path/to/config.js --output messages.pot 'src/**/{*.js,*.jsx}'
+react-gettext-parser --config path/to/config.js --output messages.pot ['src/**/{*.js,*.jsx}']
 ```
 
 ### Using the API
@@ -29,13 +29,13 @@ react-gettext-parser --config path/to/config.js --output messages.pot 'src/**/{*
 import { parseGlob } from 'react-gettext-parser';
 
 // Parse a file and put it into a pot file
-parseGlob('src/**/*.js', { output: 'messages.pot' }, () => {
+parseGlob(['src/**/{*.js,*.jsx}'], { output: 'messages.pot' }, () => {
   // Done!
 });
 
 // You can also get extracted strings as a list of message objects
 import { extractMessagesFromGlob } from 'react-gettext-parser';
-const messages = extractMessagesFromGlob('src/**/*.js');
+const messages = extractMessagesFromGlob(['src/**/{*.js,*.jsx}']);
 
 /*
 Results in something like:
@@ -166,8 +166,8 @@ The above would make this component...
 ```js
 // MyComponent.jsx
 <GetText
-  message="One item" 
-  messagePlural="{{ count }} items" 
+  message="One item"
+  messagePlural="{{ count }} items"
   count={numItems}
   context="Cart"
   comment="The number of items added to the cart"
