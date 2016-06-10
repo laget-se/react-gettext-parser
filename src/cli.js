@@ -5,6 +5,7 @@ import colors from 'colors';
 import { parseGlob } from './parse';
 
 const args = require('yargs')
+  .usage('react-gettext-parser <options> glob [, glob, ...]')
   .help('h')
   .alias('h', 'help')
   .option('o', {
@@ -17,7 +18,7 @@ const args = require('yargs')
   })
   .argv;
 
-const filesGlob = args._[0];
+const filesGlob = args._;
 let opts = { output: args.output };
 
 if (args.config) {
