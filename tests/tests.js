@@ -40,6 +40,13 @@ describe('react-gettext-parser', () => {
       expect(messages[0].msgid).to.equal(expected[0].msgid);
     });
 
+    it('should do nothing when no strings are found', () => {
+      const code = getSource('NoStrings.js');
+      const messages = extractMessages(code);
+
+      expect(messages).to.have.length(0);
+    });
+
   });
 
   describe('customization', () => {
@@ -110,6 +117,11 @@ describe('react-gettext-parser', () => {
       const expected = getSource('SingleString.pot');
 
       expect(relevantPot.trim()).to.equal(expected.trim());
+    });
+
+    it('should should write empty pot when given no strings', () => {
+      const pot = toPot([]);
+      expect(/msgid\s".+"/.test(pot)).to.equal(false);
     });
 
     it('should add references to pure code parsing when provided a filename', () => {

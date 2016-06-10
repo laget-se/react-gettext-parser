@@ -10,6 +10,8 @@ const createTranslationsTable = (blocks, headers = {}) => {
   const translations = groupBy(blocks, b => b.msgctx || '');
 
   // Hack
+  // TODO: Explain this gettext-parser thingy
+  translations[''] = translations[''] || {};
   translations[''][''] = {
     msgid: '',
     msgstr: [''],
