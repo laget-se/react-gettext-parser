@@ -119,7 +119,7 @@ describe('react-gettext-parser', () => {
       expect(relevantPot.trim()).to.equal(expected.trim());
     });
 
-    it('should should write empty pot when given no strings', () => {
+    it('should write empty pot when given no strings', () => {
       const pot = toPot([]);
       expect(/msgid\s".+"/.test(pot)).to.equal(false);
     });
