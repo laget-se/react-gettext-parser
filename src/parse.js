@@ -78,7 +78,6 @@ export const getUniqueBlocks = blocks =>
     const existingBlock = unique.filter(x => isEqualBlock(x)).shift();
 
     if (existingBlock) {
-
       // Concatenate comments to translators
       if (block.comments.translator.length > 0) {
         existingBlock.comments.translator = uniq(existingBlock.comments.translator.concat(block.comments.translator));
@@ -193,10 +192,9 @@ export const getTraverser = (cb = noop, opts = {}) => {
     },
 
     /**
-     * Gettext function calls, e.g.:
-     *
-     * ngettext('One item', '{{ count }} items');
-     */
+    * Gettext function calls, e.g.:
+    * ngettext('One item','{{ count }} items');
+    */
     CallExpression: {
       enter(path, state = {}) {
         const { node } = path;
@@ -244,13 +242,11 @@ export const extractMessages = (code, opts = {}) => {
 /**
  * Parses and returns extracted gettext blocks from a file at a given path
  */
-export const extractMessagesFromFile = (file, opts = {}) => {
-  return extractMessages(fs.readFileSync(file, 'utf8'), {
+export const extractMessagesFromFile = (file, opts = {}) =>
+  extractMessages(fs.readFileSync(file, 'utf8'), {
     ...opts,
     filename: file,
   });
-}
-
 
 /**
  * Parses and returns extracted gettext blocks from all files matching a glob
