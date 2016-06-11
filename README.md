@@ -17,8 +17,16 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 
 ### Using the CLI
 
-```bash
-react-gettext-parser --config path/to/config.js --output messages.pot ['src/**/{*.js,*.jsx}']
+Providing a config, using a single glob string:
+
+```sh
+react-gettext-parser --config path/to/config.js --output messages.pot 'src/**/{*.js,*.jsx}'
+```
+
+Using an array of glob strings, which is passed to [`glob-all`](https://www.npmjs.com/package/glob-all):
+
+```sh
+react-gettext-parser --output messages.pot 'src/*.js' '!src/test.js'
 ```
 
 ### Using the API
