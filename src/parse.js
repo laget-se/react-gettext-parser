@@ -214,6 +214,10 @@ export const getTraverser = (cb = noop, opts = {}) => {
           .filter(x => x)
           .reduce((a, b) => ({ ...a, ...b }), getEmptyBlock());
 
+        if (block.msgid_plural) {
+          block.msgstr = ['', ''];
+        }
+
         if (envOpts.filename) {
           block.comments.reference = [`${envOpts.filename}:${node.loc.start.line}`];
         }
