@@ -49,6 +49,21 @@ describe('react-gettext-parser', () => {
 
   });
 
+  describe('plural extraction', () => {
+
+    it('extracts plural blocks from both function calls and components', () => {
+      const code = getSource('Plurals.js');
+      const messages = extractMessages(code);
+
+      expect(messages).to.have.length(2);
+      expect(messages[0].msgid_plural).to.not.be.empty;
+      expect(messages[0].msgstr).to.eql(['', '']);
+      expect(messages[1].msgid_plural).to.not.be.empty;
+      expect(messages[1].msgstr).to.eql(['', '']);
+    });
+
+  });
+
   describe('customization', () => {
 
     it('should parse strings from custom jsx components', () => {
