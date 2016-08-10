@@ -122,6 +122,7 @@ describe('react-gettext-parser', () => {
       toPot(getJson('SingleString.json'));
 
       expect(compileSpy.called).to.equal(true);
+      compileSpy.restore();
     });
 
     it('should spit out a pot file containing an extracted string', () => {
