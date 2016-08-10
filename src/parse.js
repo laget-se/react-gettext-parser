@@ -195,9 +195,9 @@ export const getTraverser = (cb = noop, opts = {}) => {
     },
 
     /**
-    * Gettext function calls, e.g.:
-    * ngettext('One item','{{ count }} items');
-    */
+     * Gettext function calls, e.g.:
+     * ngettext('One item', '{{ count }} items');
+     */
     CallExpression: {
       enter(path, state = {}) {
         const { node } = path;
