@@ -47,6 +47,22 @@ describe('react-gettext-parser', () => {
       expect(messages).to.have.length(0);
     });
 
+    it('should support es6 template strings', () => {
+      const code = getSource('Es6Strings.js');
+      const messages = extractMessages(code);
+
+      expect(messages).to.have.length(2);
+
+      expect(messages[0].msgctxt).to.eql('context');
+      expect(messages[0].msgid).to.eql('Value is: {{ value }}');
+      expect(messages[0].msgid_plural).to.eql('Values are: {{ value }}');
+      expect(messages[0].comments.translator[0]).to.eql('Comment');
+
+      expect(messages[1].msgctxt).to.eql('context');
+      expect(messages[1].msgid).to.eql('One thing');
+      expect(messages[1].msgid_plural).to.eql('Many things');
+    });
+
   });
 
   describe('plural extraction', () => {
