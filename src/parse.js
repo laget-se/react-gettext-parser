@@ -9,7 +9,7 @@ import glob from 'glob-all';
 import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS } from './defaults';
 import { outputPot } from './io';
 import { toPot } from './json2pot';
-import { isGettextFuncCall, isGettextComponent, getFuncName, getJSXAttributeValue } from './node-helpers';
+import { isGettextFuncCall, isGettextComponent, getFuncName, getGettextStringFromNodeArgument } from './node-helpers';
 
 const noop = () => {};
 
@@ -33,7 +33,10 @@ const getGettextBlockFromComponent = (propsMap, node) => {
 
   const propValues = node.attributes
     .filter(attr => gettextPropNames.indexOf(attr.name.name) !== -1)
-    .reduce((props, attr) => ({ ...props, [attr.name.name]: getJSXAttributeValue(attr) }), {});
+    .reduce((props, attr) => ({
+      ...props,
+      [attr.name.name]: getGettextStringFromNodeArgument(attr),
+    }), {});
 
   const block = Object.keys(propValues)
     .reduce((currBlock, propName) => {
@@ -192,9 +195,9 @@ export const getTraverser = (cb = noop, opts = {}) => {
     },
 
     /**
-    * Gettext function calls, e.g.:
-    * ngettext('One item','{{ count }} items');
-    */
+     * Gettext function calls, e.g.:
+     * ngettext('One item', '{{ count }} items');
+     */
     CallExpression: {
       enter(path, state = {}) {
         const { node } = path;
@@ -208,10 +211,12 @@ export const getTraverser = (cb = noop, opts = {}) => {
         }
 
         const mappedArgs = funcArgsMap[getFuncName(node)];
-
         const block = mappedArgs
-          .map((arg, i) => (arg && node.arguments[i] ? { [arg]: node.arguments[i].value } : null))
-          .filter(x => x)
+          .filter((arg, i) => arg && node.arguments[i])
+          .map((arg, i) => {
+            const stringValue = getGettextStringFromNodeArgument(node.arguments[i]);
+            return { [arg]: stringValue };
+          })
           .reduce((a, b) => ({ ...a, ...b }), getEmptyBlock());
 
         if (block.msgid_plural) {
