@@ -1,7 +1,7 @@
 import React from 'react';
 import { GetText, gt } from 'gettext-lib';
 
-const MergeB = () =>
+const EmptyStrings = () =>
   <div>
     <GetText message="" messagePlural="" />
     <GetText message="" messagePlural="non-empty plural" count={2} context="context" />
@@ -19,4 +19,4 @@ const MergeB = () =>
     {gt.dnpgettext('domain', 'context', '', 'non-empty plural', 2)}
   </div>;
 
-export default MergeB;
+export default EmptyStrings;
