@@ -9,7 +9,7 @@ export const GETTEXT_FUNC_ARGS_MAP = {
   pgettext: ['msgctxt', 'msgid'],
   dpgettext: [null, 'msgctxt', 'msgid'],
   npgettext: ['msgctxt', 'msgid', 'msgid_plural'],
-  dnpgettext: [null, 'msgid', 'msgid_plural'],
+  dnpgettext: [null, 'msgctxt', 'msgid', 'msgid_plural'],
 };
 
 // Default mappings between gettext components' attributes and their
