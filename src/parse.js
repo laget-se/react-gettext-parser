@@ -213,13 +213,12 @@ export const getTraverser = (cb = noop, opts = {}) => {
         const mappedArgs = funcArgsMap[getFuncName(node)];
         const block = mappedArgs
           .map((arg, i) => {
-            if (arg && node.arguments[i]) {
-              const stringValue = getGettextStringFromNodeArgument(node.arguments[i]);
-              return { [arg]: stringValue };
-            }
-            else {
+            if (!arg || !node.arguments[i]) {
               return {};
             }
+
+            const stringValue = getGettextStringFromNodeArgument(node.arguments[i]);
+            return { [arg]: stringValue };
           })
           .reduce((a, b) => ({ ...a, ...b }), getEmptyBlock());
 
