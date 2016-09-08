@@ -76,7 +76,7 @@ export const areBlocksEqual = curry((a, b) =>
  * concatenated.
  */
 export const getUniqueBlocks = blocks =>
-  blocks.reduce((unique, block) => {
+  blocks.filter(x => x.msgid.trim()).reduce((unique, block) => {
     const isEqualBlock = areBlocksEqual(block);
     const existingBlock = unique.filter(x => isEqualBlock(x)).shift();
 
@@ -212,8 +212,11 @@ export const getTraverser = (cb = noop, opts = {}) => {
 
         const mappedArgs = funcArgsMap[getFuncName(node)];
         const block = mappedArgs
-          .filter((arg, i) => arg && node.arguments[i])
           .map((arg, i) => {
+            if (!arg || !node.arguments[i]) {
+              return {};
+            }
+
             const stringValue = getGettextStringFromNodeArgument(node.arguments[i]);
             return { [arg]: stringValue };
           })

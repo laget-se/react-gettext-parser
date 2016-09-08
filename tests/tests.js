@@ -47,6 +47,13 @@ describe('react-gettext-parser', () => {
       expect(messages).to.have.length(0);
     });
 
+    it('should ignore empty strings', () => {
+      const code = getSource('EmptyStrings.js');
+      const messages = extractMessages(code);
+
+      expect(messages).to.have.length(0);
+    });
+
     it('should support es6 template strings', () => {
       const code = getSource('Es6Strings.js');
       const messages = extractMessages(code);
