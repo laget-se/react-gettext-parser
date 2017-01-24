@@ -19,7 +19,7 @@ const getEmptyBlock = () => ({
   msgstr: [''],
   comments: {
     reference: [],
-    translator: [],
+    extracted: [],
   },
 });
 
@@ -54,7 +54,7 @@ const getGettextBlockFromComponent = (propsMap, node) => {
         currBlock.msgctxt = value;
       }
       else if (gettextVar === 'comment') {
-        currBlock.comments.translator.push(value);
+        currBlock.comments.extracted.push(value);
       }
 
       return currBlock;
@@ -82,8 +82,8 @@ export const getUniqueBlocks = blocks =>
 
     if (existingBlock) {
       // Concatenate comments to translators
-      if (block.comments.translator.length > 0) {
-        existingBlock.comments.translator = uniq(existingBlock.comments.translator.concat(block.comments.translator));
+      if (block.comments.extracted.length > 0) {
+        existingBlock.comments.extracted = uniq(existingBlock.comments.extracted.concat(block.comments.extracted));
       }
 
       // Concatenate source references
