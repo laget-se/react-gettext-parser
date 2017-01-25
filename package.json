@@ -1,6 +1,6 @@
 {
   "name": "react-gettext-parser",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A gettext parser for React. Spits out .pot files!",
   "engines": {
     "node": ">=4.0.0",
