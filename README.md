@@ -54,7 +54,7 @@ Results in something like:
     msgid: "Translate me"
     msgstr: [""],
     comments: {
-      translator: ["A comment to translators"],
+      extracted: ["A comment to translators"],
       reference: ["MyComponent.jsx:13"]
     }
   },

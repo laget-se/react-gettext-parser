@@ -63,7 +63,7 @@ describe('react-gettext-parser', () => {
       expect(messages[0].msgctxt).to.eql('context');
       expect(messages[0].msgid).to.eql('Value is: {{ value }}');
       expect(messages[0].msgid_plural).to.eql('Values are: {{ value }}');
-      expect(messages[0].comments.translator[0]).to.eql('Comment');
+      expect(messages[0].comments.extracted[0]).to.eql('Comment');
 
       expect(messages[1].msgctxt).to.eql('context');
       expect(messages[1].msgid).to.eql('One thing');

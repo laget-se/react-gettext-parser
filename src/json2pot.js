@@ -34,7 +34,7 @@ const convertCommentArraysToStrings = (blocks) =>
     ...b,
     comments: {
       reference: b.comments.reference.join('\n'),
-      translator: b.comments.translator.join('\n'),
+      extracted: b.comments.extracted.join('\n'),
     },
   }));
 
