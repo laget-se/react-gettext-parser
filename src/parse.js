@@ -76,7 +76,7 @@ export const areBlocksEqual = curry((a, b) =>
  * concatenated.
  */
 export const getUniqueBlocks = blocks =>
-  blocks.filter(x => x.msgid.trim()).reduce((unique, block) => {
+  blocks.filter(x => x.msgid && x.msgid.trim()).reduce((unique, block) => {
     const isEqualBlock = areBlocksEqual(block);
     const existingBlock = unique.filter(x => isEqualBlock(x)).shift();
 
