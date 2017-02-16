@@ -54,6 +54,13 @@ describe('react-gettext-parser', () => {
       expect(messages).to.have.length(0);
     });
 
+    it('should ignore non-static messages', () => {
+      const code = getSource('NonStatic.js');
+      const messages = extractMessages(code);
+
+      expect(messages).to.have.length(0);
+    });
+
     it('should support es6 template strings', () => {
       const code = getSource('Es6Strings.js');
       const messages = extractMessages(code);
