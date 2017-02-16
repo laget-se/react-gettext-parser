@@ -1,4 +1,7 @@
-# react-gettext-parser ![Build status](https://travis-ci.org/laget-se/react-gettext-parser.svg?branch=master)
+# react-gettext-parser
+
+[![npm version](https://badge.fury.io/js/react-gettext-parser.svg)](https://badge.fury.io/js/react-gettext-parser)
+[![Build Status](https://travis-ci.org/laget-se/react-gettext-parser.svg?branch=master)](https://travis-ci.org/laget-se/react-gettext-parser)
 
 A gettext utility that extracts translatable strings from JSX (and regular JavaScript) and puts them into a .pot file. It uses the [babylon](https://github.com/babel/babylon) AST parser.
 
