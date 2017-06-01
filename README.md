@@ -197,6 +197,11 @@ msgstr[0] ""
 msgstr[1] ""
 ```
 
+##### `verbose`
+An boolean as to include console.log, can be useful for debugging
+
+
+
 ##### `funcArgumentsMap`
 
 An object of function names and corresponding arrays of strings that matches arguments against gettext variables.

@@ -1,10 +1,10 @@
-
 import fs from 'fs';
 import * as babylon from 'babylon';
 import traverse from 'babel-traverse';
 import curry from 'lodash.curry';
 import uniq from 'lodash.uniq';
 import glob from 'glob-all';
+import colors from 'colors';
 
 import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS } from './defaults';
 import { outputPot } from './io';
@@ -275,7 +275,7 @@ export const extractMessagesFromGlob = (globArr, opts = {}) => {
  */
 export const parse = (code, opts = {}, cb = noop) => {
   const blocks = extractMessages(code);
-  outputPot(opts.output, toPot(blocks), cb);
+  outputPot(opts.verbose, opts.output, toPot(blocks), cb);
 };
 
 /**
@@ -290,4 +290,4 @@ export const parseFile = (file, opts = {}, cb = noop) =>
  * then writing them to a .pot file
  */
 export const parseGlob = (globArr, opts = {}, cb = noop) =>
-  outputPot(opts.output, toPot(extractMessagesFromGlob(globArr, opts)), cb);
+  outputPot(opts.verbose, opts.output, toPot(extractMessagesFromGlob(globArr, opts)), cb);
