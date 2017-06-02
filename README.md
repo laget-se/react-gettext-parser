@@ -198,7 +198,19 @@ msgstr[1] ""
 ```
 
 ##### `verbose`
-An boolean as to include console.log, can be useful for debugging
+An boolean as to include console.log, can be useful for debugging, default is false
+
+##### `filename`
+An option to configure the filename format used in the gettext reference
+
+###### absolute (default)
+Generate an absolute filename
+
+###### relative
+Generate a relative filename to the current working directory
+
+###### none
+Disable generating of filename
 
 
 

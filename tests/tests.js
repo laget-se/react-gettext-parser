@@ -1,12 +1,13 @@
 /* global describe it */
 
 import { assert, expect } from 'chai';
-import { spy } from 'sinon';
+import { stub, spy } from 'sinon';
 import { po } from 'gettext-parser';
 import fs from 'fs';
 import path from 'path';
 
 import {
+  getTraverser,
   extractMessages,
   extractMessagesFromFile,
   extractMessagesFromGlob,
@@ -177,6 +178,102 @@ describe('react-gettext-parser', () => {
 
       expect(pot).to.contain('#: SingleString.jsx');
     });
+
+  });
+
+
+  describe('traverser', () => {
+    describe('Program enter', () => {
+      it('should merge state opts', () => {
+        const state = {
+          key1: false,
+        }
+        const opts = {
+          key1: true,
+          key2: false,
+        }
+
+        const expected = {
+          filename: undefined,
+          key1: true,
+          key2: false,
+        }
+
+        const traverser = getTraverser(() => {}, opts)
+        traverser.Program.enter(path, state)
+
+        expect(state.opts).to.deep.equal(expected)
+      });
+
+
+      it('should generate relative filename from cwd', () => {
+        const state = {
+          file: {
+            opts: {
+              filename: '/path/to/file.js'
+            }
+          }
+        }
+        const opts = {
+          filename: 'relative',
+        }
+
+        const expected = '/file.js'
+
+        const processCwd = stub(process, 'cwd');
+        processCwd.returns('/path/to')
+
+        const traverser = getTraverser(() => {}, opts)
+        traverser.Program.enter(path, state)
+
+        expect(state.opts.filename).to.equal(expected)
+
+        processCwd.restore();
+      });
+
+
+      it('should preserve absolute filename', () => {
+        const state = {
+          file: {
+            opts: {
+              filename: '/path/to/file.js'
+            }
+          }
+        }
+        const opts = {
+          filename: 'absolute',
+        }
+
+        const expected = '/path/to/file.js'
+
+        const traverser = getTraverser(() => {}, opts)
+        traverser.Program.enter(path, state)
+
+        expect(state.opts.filename).to.equal(expected)
+      });
+
+
+
+      it('shouldnt generate filename', () => {
+        const state = {
+          file: {
+            opts: {
+              filename: '/path/to/file.js'
+            }
+          }
+        }
+        const opts = {
+          filename: 'none',
+        }
+
+        const expected = undefined
+
+        const traverser = getTraverser(() => {}, opts)
+        traverser.Program.enter(path, state)
+
+        expect(state.opts.filename).to.equal(expected)
+      });
+    })
 
   });
 

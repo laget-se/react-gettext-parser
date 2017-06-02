@@ -126,8 +126,23 @@ export const getTraverser = (cb = noop, opts = {}) => {
         state.opts = {
           ...state.opts,
           ...opts,
-          filename: state.file ? state.file.opts.filename : opts.filename,
         };
+
+        let filename = state.file ? state.file.opts.filename : opts.filename;
+
+        if (filename) {
+          switch (state.opts.filename) {
+            case 'relative':
+              filename = filename.replace(process.cwd(), '');
+              break;
+            case 'none':
+              filename = undefined;
+              break;
+            default:
+          }
+        }
+
+        state.opts.filename = filename;
       },
 
       exit(path, state = {}) {
