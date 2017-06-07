@@ -11,6 +11,7 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 * [Usage](#usage)
 * [API](#api)
 * [Developing](#developing)
+* [See also](#see-also)
 * [License](#license)
 
 ## Features
@@ -261,6 +262,13 @@ Dev mode, running `build` in watch mode:
 ```sh
 npm run dev
 ```
+
+## See also
+
+* [node-gettext](https://github.com/alexanderwallin/node-gettext) - A JavaScript implementation of gettext, a localization framework.
+* [gettext-parser](https://github.com/smhg/gettext-parser) - Parsing and compiling gettext translations between .po/.mo files and JSON
+* [lioness](https://github.com/alexanderwallin/lioness) – Gettext library for React
+* [narp](https://github.com/laget-se/narp) - Workflow CLI tool that syncs translations between your app and Transifex
 
 ## License
 
