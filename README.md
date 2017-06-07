@@ -7,6 +7,12 @@ A gettext utility that extracts translatable strings from JSX (and regular JavaS
 
 It can be used directly in JavaScript, in gulp, [via babel](https://github.com/alexanderwallin/babel-plugin-react-gettext-parser) or as a standalone CLI utility to be used in the terminal or from npm scripts.
 
+* [Features](#features)
+* [Usage](#usage)
+* [API](#api)
+* [Developing](#developing)
+* [License](#license)
+
 ## Features
 
 * Extracts translatable strings from JSX and JavaScript (obsviously)
