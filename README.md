@@ -203,10 +203,7 @@ An boolean as to include console.log, can be useful for debugging, default is fa
 ##### `filename`
 An option to configure the filename format used in the gettext reference
 
-###### absolute (default)
-Generate an absolute filename
-
-###### relative
+###### relative (default)
 Generate a relative filename to the current working directory
 
 ###### none

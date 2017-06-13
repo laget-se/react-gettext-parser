@@ -132,13 +132,12 @@ export const getTraverser = (cb = noop, opts = {}) => {
 
         if (filename) {
           switch (state.opts.filename) {
-            case 'relative':
-              filename = filename.replace(process.cwd(), '');
-              break;
             case 'none':
               filename = undefined;
               break;
             default:
+              filename = filename.replace(process.cwd() + '/', '');
+              break;
           }
         }
 

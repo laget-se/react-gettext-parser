@@ -210,7 +210,7 @@ describe('react-gettext-parser', () => {
         const state = {
           file: {
             opts: {
-              filename: '/path/to/file.js'
+              filename: '/path/to/dir/file.js'
             }
           }
         }
@@ -218,7 +218,7 @@ describe('react-gettext-parser', () => {
           filename: 'relative',
         }
 
-        const expected = '/file.js'
+        const expected = 'dir/file.js'
 
         const processCwd = stub(process, 'cwd');
         processCwd.returns('/path/to')
@@ -230,28 +230,6 @@ describe('react-gettext-parser', () => {
 
         processCwd.restore();
       });
-
-
-      it('should preserve absolute filename', () => {
-        const state = {
-          file: {
-            opts: {
-              filename: '/path/to/file.js'
-            }
-          }
-        }
-        const opts = {
-          filename: 'absolute',
-        }
-
-        const expected = '/path/to/file.js'
-
-        const traverser = getTraverser(() => {}, opts)
-        traverser.Program.enter(path, state)
-
-        expect(state.opts.filename).to.equal(expected)
-      });
-
 
 
       it('shouldnt generate filename', () => {
