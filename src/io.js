@@ -1,7 +1,7 @@
 import fs from 'fs';
 import colors from 'colors';
 
-export const outputPot = (verbose, filePath, contents, cb = () => {}) => {
+export const outputPot = (filePath, contents, cb = () => {}, verbose) => {
   if (filePath) {
     fs.writeFileSync(filePath, contents);
   }

@@ -290,7 +290,7 @@ export const extractMessagesFromGlob = (globArr, opts = {}) => {
  */
 export const parse = (code, opts = {}, cb = noop) => {
   const blocks = extractMessages(code);
-  outputPot(opts.verbose, opts.output, toPot(blocks), cb);
+  outputPot(opts.output, toPot(blocks), cb, opts.verbose);
 };
 
 /**
@@ -305,4 +305,4 @@ export const parseFile = (file, opts = {}, cb = noop) =>
  * then writing them to a .pot file
  */
 export const parseGlob = (globArr, opts = {}, cb = noop) =>
-  outputPot(opts.verbose, opts.output, toPot(extractMessagesFromGlob(globArr, opts)), cb);
+  outputPot(opts.output, toPot(extractMessagesFromGlob(globArr, opts)), cb, opts.verbose);
