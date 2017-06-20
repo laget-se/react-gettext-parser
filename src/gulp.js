@@ -5,7 +5,7 @@ import { File, PluginError } from 'gulp-util';
 import colors from 'colors';
 
 import { toPot } from './json2pot';
-import { extractMessages } from './parse';
+import { extractMessages, getUniqueBlocks } from './parse';
 
 const GULP_OPTS = {
   output: 'messages.pot',
@@ -46,6 +46,8 @@ export const gulp = (opts = {}) => {
   }
 
   function write(cb) {
+    allMessages = getUniqueBlocks(allMessages);
+
     const potFile = new File({
       base: process.cwd(),
       path: options.output,
