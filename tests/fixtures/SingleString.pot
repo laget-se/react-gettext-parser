@@ -1,3 +1,2 @@
-
 msgid "Translate me"
 msgstr ""
