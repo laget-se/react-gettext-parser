@@ -116,6 +116,10 @@ describe('react-gettext-parser', () => {
       expect(messages).to.have.length(1);
     });
 
+    it('should not fail on import()', () => {
+      const messages = extractMessagesFromFile('tests/fixtures/DynamicImportCaller.js');
+    });
+
   });
 
   describe('merging identical strings', () => {

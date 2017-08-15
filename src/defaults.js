@@ -41,5 +41,6 @@ export const BABEL_PARSING_OPTS = {
     'asyncGenerators',
     'functionBind',
     'functionSent',
+    'dynamicImport',
   ],
 };
