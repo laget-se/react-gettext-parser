@@ -19,7 +19,7 @@
     "dev": "babel -w --out-dir lib src",
     "prebuild": "npm run clean",
     "build": "babel --out-dir lib src",
-    "postinstall": "babel --out-dir lib src"
+    "postinstall": "npm install && npm run build"
   },
   "repository": {
     "type": "git",
