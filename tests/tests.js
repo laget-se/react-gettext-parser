@@ -152,7 +152,25 @@ describe('react-gettext-parser', () => {
         });
 
         expect(messages[0].msgid).to.equal('ABC');
-      })
+      });
+
+      it('combines trim and trimNewlines correctly', () => {
+        const messages = extractMessagesFromFile('tests/fixtures/Whitespace.jsx', {
+          trim: true,
+          trimNewlines: true,
+        });
+
+        expect(messages[0].msgid).to.equal('A      B      C');
+      });
+
+      it('combines trim and trimLines correctly', () => {
+        const messages = extractMessagesFromFile('tests/fixtures/Whitespace.jsx', {
+          trim: true,
+          trimLines: true,
+        });
+
+        expect(messages[0].msgid).to.equal('A\nB\nC');
+      });
     });
 
   });
