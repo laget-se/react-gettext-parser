@@ -120,6 +120,32 @@ describe('react-gettext-parser', () => {
       extractMessagesFromFile('tests/fixtures/DynamicImportCaller.js');
     });
 
+    describe('should trim', () => {
+      it('start and end whitespace when trim is true', () => {
+        const messages = extractMessagesFromFile('tests/fixtures/Whitespace.jsx', {
+          trim: true,
+        });
+
+        expect(messages[0].msgid).to.equal('A\n      B\n      C');
+      });
+
+      it('new-lines when trimNewlines is true', () => {
+        const messages = extractMessagesFromFile('tests/fixtures/Whitespace.jsx', {
+          trimNewlines: true,
+        });
+
+        expect(messages[0].msgid).to.equal('      A      B      C    ');
+      });
+
+      it('whitespace from each line\'s start and end when trimLines is true', () => {
+        const messages = extractMessagesFromFile('tests/fixtures/Whitespace.jsx', {
+          trimLines: true,
+        });
+
+        expect(messages[0].msgid).to.equal('A\nB\nC');
+      });
+    });
+
   });
 
   describe('merging identical strings', () => {

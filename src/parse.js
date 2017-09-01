@@ -248,6 +248,30 @@ export const extractMessages = (code, opts = {}) => {
 
   traverse(ast, traverser);
 
+  // Remove whitespace according to options
+  if (opts.trim) {
+    blocks = blocks.map(block => ({
+      ...block,
+      msgid: block.msgid.trim(),
+    }));
+  }
+  if (opts.trimNewlines) {
+    blocks = blocks.map(block => ({
+      ...block,
+      msgid: block.msgid.replace(/\n/g, ''),
+    }));
+  }
+  if (opts.trimLines) {
+    blocks = blocks.map(block => ({
+      ...block,
+      msgid: block.msgid
+        .split('\n')
+        .map(x => x.trim())
+        .filter(x => x)
+        .join('\n'),
+    }));
+  }
+
   return blocks;
 };
 
