@@ -144,6 +144,15 @@ describe('react-gettext-parser', () => {
 
         expect(messages[0].msgid).to.equal('A\nB\nC');
       });
+
+      it('combines trimLines and trimNewlines correctly', () => {
+        const messages = extractMessagesFromFile('tests/fixtures/Whitespace.jsx', {
+          trimLines: true,
+          trimNewlines: true,
+        });
+
+        expect(messages[0].msgid).to.equal('ABC');
+      })
     });
 
   });

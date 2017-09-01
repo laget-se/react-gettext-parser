@@ -255,12 +255,6 @@ export const extractMessages = (code, opts = {}) => {
       msgid: block.msgid.trim(),
     }));
   }
-  if (opts.trimNewlines) {
-    blocks = blocks.map(block => ({
-      ...block,
-      msgid: block.msgid.replace(/\n/g, ''),
-    }));
-  }
   if (opts.trimLines) {
     blocks = blocks.map(block => ({
       ...block,
@@ -269,6 +263,12 @@ export const extractMessages = (code, opts = {}) => {
         .map(x => x.trim())
         .filter(x => x)
         .join('\n'),
+    }));
+  }
+  if (opts.trimNewlines) {
+    blocks = blocks.map(block => ({
+      ...block,
+      msgid: block.msgid.replace(/\n/g, ''),
     }));
   }
 
