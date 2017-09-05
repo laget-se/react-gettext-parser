@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexanderwallin/react-gettext-parser.git"
+    "url": "git+https://github.com/laget-se/react-gettext-parser.git"
   },
   "keywords": [
     "gettext",
@@ -38,9 +38,9 @@
   "author": "Alexander Wallin <office@alexanderwallin.com> (http://alexanderwallin.com)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/alexanderwallin/react-gettext-parser/issues"
+    "url": "https://github.com/laget-se/react-gettext-parser/issues"
   },
-  "homepage": "https://github.com/alexanderwallin/react-gettext-parser#readme",
+  "homepage": "https://github.com/laget-se/react-gettext-parser#readme",
   "dependencies": {
     "babel-traverse": "^6.7.4",
     "babylon": "^6.7.0",
