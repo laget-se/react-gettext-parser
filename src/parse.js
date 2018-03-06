@@ -266,9 +266,10 @@ export const extractMessages = (code, opts = {}) => {
     }));
   }
   if (opts.trimNewlines) {
+    const replaceValue = typeof opts.trimNewlines === 'string' ? opts.trimNewlines : '';
     blocks = blocks.map(block => ({
       ...block,
-      msgid: block.msgid.replace(/\n/g, ''),
+      msgid: block.msgid.replace(/\n/g, replaceValue),
     }));
   }
 
