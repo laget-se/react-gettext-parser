@@ -137,6 +137,14 @@ describe('react-gettext-parser', () => {
         expect(messages[0].msgid).to.equal('      A      B      C    ');
       });
 
+      it('new-lines, replaced by a custom character when it is a string', () => {
+        const messages = extractMessagesFromFile('tests/fixtures/Whitespace.jsx', {
+          trimNewlines: 'x',
+        });
+
+        expect(messages[0].msgid).to.equal('x      Ax      Bx      Cxxx    ');
+      });
+
       it('whitespace from each line\'s start and end when trimLines is true', () => {
         const messages = extractMessagesFromFile('tests/fixtures/Whitespace.jsx', {
           trimLines: true,
