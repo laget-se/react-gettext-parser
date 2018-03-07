@@ -13,7 +13,7 @@
     "lib"
   ],
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register tests/tests.js",
+    "test": "mocha --compilers js:babel-core/register tests/*.js",
     "lint": "eslint src",
     "clean": "rimraf lib",
     "dev": "babel -w --out-dir lib src",
