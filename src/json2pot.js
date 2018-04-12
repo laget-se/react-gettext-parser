@@ -29,11 +29,13 @@ const createTranslationsTable = (blocks, headers = {}) => {
   };
 };
 
+const convertReferenceToString = reference => `${reference.filename}:${reference.line}`;
+
 const convertCommentArraysToStrings = (blocks) =>
   blocks.map(b => ({
     ...b,
     comments: {
-      reference: b.comments.reference.join('\n'),
+      reference: b.comments.reference.map(ref => convertReferenceToString(ref)).join('\n'),
       extracted: b.comments.extracted.join('\n'),
     },
   }));

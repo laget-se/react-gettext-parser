@@ -188,24 +188,26 @@ describe('react-gettext-parser', () => {
     it('should merge two identical strings and concatenate references', () => {
       const messages = extractMessagesFromGlob('tests/fixtures/Merge{A,B}.jsx');
       expect(messages).to.have.length(1);
-      expect(messages[0].comments.reference).to.have.length(2);
+      expect(messages[0].comments.reference).to.have.length(3);
     });
 
     it('should merge identical strings independant of jsx or js', () => {
       const messages = extractMessagesFromGlob('tests/fixtures/Merge{A,C}.jsx');
       expect(messages).to.have.length(1);
-      expect(messages[0].comments.reference).to.have.length(2);
+      expect(messages[0].comments.reference).to.have.length(3);
     });
 
-    it('should sort references alphabetically', () => {
+    it('should sort references alphabetically with line and col order', () => {
       const messages = extractMessagesFromGlob('tests/fixtures/Merge*.jsx');
       expect(messages).to.have.length(1);
 
       const references = messages[0].comments.reference;
-      expect(references).to.have.length(3);
-      expect(references[0]).to.contain('MergeA.jsx');
-      expect(references[1]).to.contain('MergeB.jsx');
-      expect(references[2]).to.contain('MergeC.jsx');
+      expect(references).to.have.length(4);
+      expect(references[0].filename).to.contain('MergeA.jsx');
+      expect(references[1].filename).to.contain('MergeA.jsx');
+      expect(references[2].filename).to.contain('MergeB.jsx');
+      expect(references[3].filename).to.contain('MergeC.jsx');
+      expect(references[0].line).to.below(references[1].line);
     });
 
   });

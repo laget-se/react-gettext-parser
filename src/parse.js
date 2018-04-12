@@ -1,4 +1,3 @@
-
 import fs from 'fs';
 import * as babylon from 'babylon';
 import traverse from 'babel-traverse';
@@ -71,6 +70,23 @@ export const areBlocksEqual = curry((a, b) =>
 );
 
 /**
+ * Returns whether two gettext reference comment are considered equal
+ */
+const areReferenceEqual = curry((a, b) =>
+  (a.filename === b.filename && a.line === b.line && a.column === b.column)
+);
+
+const compareReference = (a, b) => {
+  if (a.filename === b.filename) {
+    if (a.line === b.line) {
+      return a.column - b.column;
+    }
+    return a.line - b.line;
+  }
+  return a.filename.localeCompare(b.filename);
+};
+
+/**
  * Takes a list of blocks and returns a list with unique ones.
  * Translator comments and source code reference comments are
  * concatenated.
@@ -89,7 +105,9 @@ export const getUniqueBlocks = blocks =>
       // Concatenate source references
       if (block.comments.reference.length > 0) {
         existingBlock.comments.reference = uniq(existingBlock.comments.reference
-                                           .concat(block.comments.reference)).sort();
+            .concat(block.comments.reference),
+            areReferenceEqual)
+          .sort(compareReference);
       }
 
       // Add plural id and overwrite msgstr
@@ -157,7 +175,11 @@ export const getTraverser = (cb = noop, opts = {}) => {
         const block = getGettextBlockFromComponent(propsMap, node);
 
         if (envOpts.filename) {
-          block.comments.reference = [`${envOpts.filename}:${node.loc.start.line}`];
+          block.comments.reference = [{
+            filename: envOpts.filename,
+            line: node.loc.start.line,
+            column: node.loc.start.column,
+          }];
         }
 
         blocks.push(block);
@@ -187,7 +209,11 @@ export const getTraverser = (cb = noop, opts = {}) => {
         block.msgid = node.value;
 
         if (envOpts.filename) {
-          block.comments.reference = [`${envOpts.filename}:${node.loc.start.line}`];
+          block.comments.reference = [{
+            filename: envOpts.filename,
+            line: node.loc.start.line,
+            column: node.loc.start.column,
+          }];
         }
 
         blocks.push(block);
@@ -227,7 +253,11 @@ export const getTraverser = (cb = noop, opts = {}) => {
         }
 
         if (envOpts.filename) {
-          block.comments.reference = [`${envOpts.filename}:${node.loc.start.line}`];
+          block.comments.reference = [{
+            filename: envOpts.filename,
+            line: node.loc.start.line,
+            column: node.loc.start.column,
+          }];
         }
         blocks.push(block);
       },
