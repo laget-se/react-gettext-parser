@@ -72,7 +72,7 @@ export const areBlocksEqual = curry((a, b) =>
 /**
  * Returns whether two gettext reference comment are considered equal
  */
-const areReferenceEqual = curry((a, b) =>
+const areReferencesEqual = curry((a, b) =>
   (a.filename === b.filename && a.line === b.line && a.column === b.column)
 );
 
@@ -106,7 +106,7 @@ export const getUniqueBlocks = blocks =>
       if (block.comments.reference.length > 0) {
         existingBlock.comments.reference = uniq(existingBlock.comments.reference
             .concat(block.comments.reference),
-            areReferenceEqual)
+            areReferencesEqual)
           .sort(compareReference);
       }
 
@@ -321,7 +321,7 @@ export const extractMessagesFromFile = (file, opts = {}) =>
 export const extractMessagesFromGlob = (globArr, opts = {}) => {
   const blocks = glob.sync(globArr)
     .reduce((all, file) => all.concat(extractMessagesFromFile(file, opts)), []);
-
+    
   return getUniqueBlocks(blocks);
 };
 
