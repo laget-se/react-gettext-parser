@@ -80,7 +80,11 @@ Results in something like:
     msgstr: [""],
     comments: {
       extracted: ["A comment to translators"],
-      reference: ["MyComponent.jsx:13"]
+      reference: [{
+        filename:"MyComponent.jsx",
+        line:13,
+        column:1
+      }]
     }
   },
   // And so on...

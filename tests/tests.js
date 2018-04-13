@@ -180,11 +180,31 @@ describe('react-gettext-parser', () => {
         expect(messages[0].msgid).to.equal('A\nB\nC');
       });
     });
+  });
 
+  describe('line and column number', () => {
+    it('should have line and column', () => {
+      const messages = extractMessagesFromFile('tests/fixtures/SingleString.js');
+      expect(messages).to.have.length(1);
+      const references = messages[0].comments.reference;
+      expect(references[0].line).to.equal(7);
+      expect(references[0].column).to.equal(6);
+    });
+
+    it('should sort with line and column order', () => {
+      const messages = extractMessagesFromFile('tests/fixtures/DuplicatedStrings.jsx');
+      expect(messages).to.have.length(1);
+
+      const references = messages[0].comments.reference;
+      expect(references).to.have.length(2);
+      expect(references[0].line).to.equal(8);
+      expect(references[1].line).to.equal(10);
+      expect(references[0].column).to.equal(6);
+      expect(references[1].column).to.equal(4);
+    });
   });
 
   describe('merging identical strings', () => {
-
     it('should merge two identical strings and concatenate references', () => {
       const messages = extractMessagesFromGlob('tests/fixtures/Merge{A,B}.jsx');
       expect(messages).to.have.length(1);
@@ -203,9 +223,9 @@ describe('react-gettext-parser', () => {
 
       const references = messages[0].comments.reference;
       expect(references).to.have.length(3);
-      expect(references[0]).to.contain('MergeA.jsx');
-      expect(references[1]).to.contain('MergeB.jsx');
-      expect(references[2]).to.contain('MergeC.jsx');
+      expect(references[0].filename).to.contain('MergeA.jsx');
+      expect(references[1].filename).to.contain('MergeB.jsx');
+      expect(references[2].filename).to.contain('MergeC.jsx');
     });
 
   });
@@ -244,5 +264,5 @@ describe('react-gettext-parser', () => {
     });
 
   });
-
+  
 });
