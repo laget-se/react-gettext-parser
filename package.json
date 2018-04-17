@@ -7,9 +7,8 @@
     "npm": ">=3.0.0"
   },
   "main": "lib/index.js",
-  "bin": "bin/react-gettext-parser.js",
+  "bin": "lib/bin.js",
   "files": [
-    "bin",
     "lib"
   ],
   "scripts": {
