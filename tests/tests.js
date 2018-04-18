@@ -1,6 +1,7 @@
-/* global describe it */
+/* eslint-env mocha */
+/* eslint no-unused-expressions: 0 */
 
-import { assert, expect } from 'chai';
+import { expect } from 'chai';
 import { spy } from 'sinon';
 import { po } from 'gettext-parser';
 import fs from 'fs';
