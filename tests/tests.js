@@ -78,6 +78,15 @@ describe('react-gettext-parser', () => {
       expect(messages[1].msgid_plural).to.eql('Many things');
     });
 
+    it('should support React children strings wrapped in JSX expressions', () => {
+      const code = getSource('JsxValueStrings.jsx');
+      const messages = extractMessages(code);
+
+      expect(messages).to.have.length(2);
+      expect(messages[0].msgid).to.equal(`I'm inside curly braces`);
+      expect(messages[1].msgid).to.equal(`I'm inside backticks inside curly braces`);
+    });
+
   });
 
   describe('plural extraction', () => {
@@ -265,5 +274,5 @@ describe('react-gettext-parser', () => {
     });
 
   });
-  
+
 });
