@@ -117,6 +117,26 @@ describe('react-gettext-parser', () => {
       expect(messages).to.have.length(1);
     });
 
+    it('should parse strings from object argument properties', () => {
+      const messages = extractMessagesFromFile('tests/fixtures/ObjectArgumentFn.js', {
+        funcArgumentsMap: {
+          translate: [null, null, {
+            message: 'msgid',
+            messagePlural: 'msgid_plural',
+            context: 'msgctxt',
+            comment: 'comment',
+          }],
+        },
+      });
+
+      expect(messages).to.have.length(1);
+      expect(messages[0].msgid).to.equal('Wow');
+      expect(messages[0].msgid_plural).to.equal('Wows');
+      expect(messages[0].msgctxt).to.equal('amazement');
+      expect(messages[0].comments.extracted).to.have.length(1);
+      expect(messages[0].comments.extracted[0]).to.equal('Be astonished');
+    });
+
     it('should supports dynamic import()', () => {
       extractMessagesFromFile('tests/fixtures/DynamicImportCaller.js');
     });
