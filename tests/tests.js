@@ -41,6 +41,15 @@ describe('react-gettext-parser', () => {
       expect(messages[0].msgid).to.equal(expected[0].msgid);
     });
 
+    it('should extract translators\' comment attached to function call', () => {
+      const code = getSource('FunctionWithComment.js');
+      const messages = extractMessages(code);
+
+      expect(messages[0].comments.extracted[0]).to.equal('A comment to translators');
+      expect(messages[1].comments.extracted[0]).to.equal('Instructions inside multi-line comment');
+      expect(messages[2].comments.extracted[0]).to.equal('Instructions inside block comment');
+    });
+
     it('should do nothing when no strings are found', () => {
       const code = getSource('NoStrings.js');
       const messages = extractMessages(code);
