@@ -279,7 +279,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
      */
     CallExpression: {
       enter(path, state = {}) {
-        const { node } = path;
+        const { node, parent } = path;
         const envOpts = state.opts || opts;
 
         const funcArgsMap = envOpts.funcArgumentsMap || GETTEXT_FUNC_ARGS_MAP;
@@ -323,6 +323,26 @@ export const getTraverser = (cb = noop, opts = {}) => {
 
         if (block.msgid_plural) {
           block.msgstr = ['', ''];
+        }
+
+        // Extract comments for translators
+        if (Array.isArray(parent.leadingComments) === true) {
+          const translatorCommentRegex = /Translators:.+/;
+          const commentNode = parent.leadingComments.find(x => translatorCommentRegex.test(x.value) === true);
+
+          if (commentNode !== undefined) {
+            const commentLine = commentNode.value
+              .split(/\n/)
+              .find(x => translatorCommentRegex.test(x));
+
+            if (commentLine !== undefined) {
+              const comment = commentLine
+                .replace(/^\s*\*/, '')
+                .replace(/Translators:/, '')
+                .trim();
+              block.comments.extracted = [comment];
+            }
+          }
         }
 
         if (envOpts.filename) {
