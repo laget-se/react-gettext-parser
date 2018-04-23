@@ -221,6 +221,59 @@ export const getTraverser = (cb = noop, opts = {}) => {
     },
 
     /**
+     * JSX expressions, a.k.a. strings inside curly braces:
+     *
+     * <GetText>{'Phrase goes here'}</GetText>
+     * <GetText>{`Text inside backticks`}</GetText>
+     */
+    JSXExpressionContainer: {
+      enter(path, state = {}) {
+        const { node, parent } = path;
+        const envOpts = state.opts || opts;
+        const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
+
+        if (
+          parent.openingElement === undefined ||
+          parent.openingElement.type !== 'JSXOpeningElement' ||
+          isGettextComponent(Object.keys(propsMap), parent.openingElement) === false
+        ) {
+          return;
+        }
+
+        let value = null;
+
+        if (node.expression.type === 'StringLiteral') {
+          value = node.expression.value;
+        }
+        else if (
+          node.expression.type === 'TemplateLiteral' &&
+          node.expression.quasis !== undefined &&
+          node.expression.quasis.length > 0
+        ) {
+          const textNode = node.expression.quasis[0];
+          if (textNode.type === 'TemplateElement') {
+            value = textNode.value.raw;
+          }
+        }
+
+        if (typeof value === 'string' && value.trim() !== '') {
+          const block = getEmptyBlock();
+          block.msgid = value;
+
+          if (envOpts.filename) {
+            block.comments.reference = [{
+              filename: envOpts.filename,
+              line: node.loc.start.line,
+              column: node.loc.start.column,
+            }];
+          }
+
+          blocks.push(block);
+        }
+      },
+    },
+
+    /**
      * Gettext function calls, e.g.:
      * ngettext('One item', '{{ count }} items');
      */
@@ -321,7 +374,7 @@ export const extractMessagesFromFile = (file, opts = {}) =>
 export const extractMessagesFromGlob = (globArr, opts = {}) => {
   const blocks = glob.sync(globArr)
     .reduce((all, file) => all.concat(extractMessagesFromFile(file, opts)), []);
-    
+
   return getUniqueBlocks(blocks);
 };
 
