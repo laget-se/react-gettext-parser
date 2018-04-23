@@ -296,8 +296,28 @@ export const getTraverser = (cb = noop, opts = {}) => {
               return {};
             }
 
-            const stringValue = getGettextStringFromNodeArgument(node.arguments[i]);
-            return { [arg]: stringValue };
+            // The argument maps directly to a gettext property
+            if (typeof arg === 'string') {
+              const stringValue = getGettextStringFromNodeArgument(node.arguments[i]);
+              return { [arg]: stringValue };
+            }
+
+            // The argument is an object mapping key names to gettext props
+            return Object.keys(arg).reduce((acc, prop) => {
+              const gettextPropName = arg[prop];
+              const matchingObjectValue = node.arguments[i].properties.find(x => x.key.name === prop).value.value;
+              return gettextPropName === 'comment'
+                ? {
+                  ...acc,
+                  comments: {
+                    extracted: [matchingObjectValue],
+                  },
+                }
+                : {
+                  ...acc,
+                  [gettextPropName]: matchingObjectValue,
+                };
+            }, {});
           })
           .reduce((a, b) => ({ ...a, ...b }), getEmptyBlock());
 
