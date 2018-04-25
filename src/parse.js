@@ -1,6 +1,6 @@
 import fs from 'fs';
 import * as babylon from 'babylon';
-import traverse from 'babel-traverse';
+import traverse from '@babel/traverse';
 import curry from 'lodash.curry';
 import uniq from 'lodash.uniq';
 import glob from 'glob-all';
@@ -12,6 +12,8 @@ import { isGettextFuncCall, isGettextComponent, getFuncName, getGettextStringFro
 
 const noop = () => {};
 
+export const TYPESCRIPT = 'TYPESCRIPT';
+
 const getEmptyBlock = () => ({
   msgctxt: '',
   msgid: null,
@@ -21,6 +23,19 @@ const getEmptyBlock = () => ({
     extracted: [],
   },
 });
+
+const isTypeScript = (opt) => {
+  if (opt.sourceType === TYPESCRIPT) return true;
+  if (opt.filename) return opt.filename.endsWith('.ts') || opt.filename.endsWith('.tsx');
+  return false;
+};
+
+const getBabelParsingOptions = (useTypeScript) => {
+  if (useTypeScript) {
+    return { ...BABEL_PARSING_OPTS, plugins: ['typescript'].concat(BABEL_PARSING_OPTS.plugins) };
+  }
+  return { ...BABEL_PARSING_OPTS, plugins: ['flow'].concat(BABEL_PARSING_OPTS.plugins) };
+};
 
 /**
  * Returns a gettext block given a mapping of component props to gettext
@@ -364,7 +379,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
 export const extractMessages = (code, opts = {}) => {
   let blocks = [];
 
-  const ast = babylon.parse(code.toString('utf8'), BABEL_PARSING_OPTS);
+  const ast = babylon.parse(code.toString('utf8'), getBabelParsingOptions(isTypeScript(opts)));
   const traverser = getTraverser(_blocks => {
     blocks = _blocks;
   }, opts);
@@ -422,7 +437,7 @@ export const extractMessagesFromGlob = (globArr, opts = {}) => {
  * Parses a string for gettext blocks and writes them to a .pot file
  */
 export const parse = (code, opts = {}, cb = noop) => {
-  const blocks = extractMessages(code);
+  const blocks = extractMessages(code, opts);
   outputPot(opts.output, toPot(blocks), cb);
 };
 

@@ -13,6 +13,7 @@ import {
   extractMessagesFromGlob,
   toPot,
 } from '../src/index.js';
+import { TYPESCRIPT } from '../src';
 
 const getSource = file => fs.readFileSync(path.join(__dirname, 'fixtures', file), 'utf8');
 const getJson = file => require(`./fixtures/${file}`);
@@ -267,6 +268,13 @@ describe('react-gettext-parser', () => {
       expect(references[2].filename).to.contain('MergeC.jsx');
     });
 
+    it('should work with both js and ts source', () => {
+      const messages = extractMessagesFromGlob('tests/fixtures/Merge{A,D}.{jsx,tsx}');
+      console.log(JSON.stringify(messages, null, 2));
+      expect(messages).to.have.length(1);
+      expect(messages[0].comments.reference).to.have.length(2);
+    });
+
   });
 
   describe('compiling to pot', () => {
@@ -300,6 +308,34 @@ describe('react-gettext-parser', () => {
       const pot = toPot(messages);
 
       expect(pot).to.contain('#: SingleString.jsx');
+    });
+
+  });
+
+  describe('typescript support', () => {
+
+    it('should extract a message from ts', () => {
+      const code = getSource('SingleString.tsx');
+      const messages = extractMessages(code, { sourceType: TYPESCRIPT });
+      const expected = getJson('SingleString.json');
+      expect(messages).to.have.length(1);
+      expect(messages[0].msgid).to.equal(expected[0].msgid);
+    });
+
+    it('should parse typescript', () => {
+      const messages = extractMessagesFromFile('tests/fixtures/SingleString.ts');
+      expect(messages).to.have.length(1);
+      const references = messages[0].comments.reference;
+      expect(references[0].line).to.equal(9);
+      expect(references[0].column).to.equal(13);
+    });
+
+    it('should parse typescript with jsx', () => {
+      const messages = extractMessagesFromFile('tests/fixtures/SingleString.tsx');
+      expect(messages).to.have.length(1);
+      const references = messages[0].comments.reference;
+      expect(references[0].line).to.equal(11);
+      expect(references[0].column).to.equal(4);
     });
 
   });

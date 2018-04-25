@@ -1,4 +1,3 @@
-
 // Default mappings between function arguments and their corresponding
 // .pot keys
 export const GETTEXT_FUNC_ARGS_MAP = {
@@ -28,7 +27,6 @@ export const BABEL_PARSING_OPTS = {
   sourceType: 'module',
   plugins: [
     'jsx',
-    'flow',
     'asyncFunctions',
     'classConstructorCall',
     'doExpressions',

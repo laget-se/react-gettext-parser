@@ -16,7 +16,7 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 
 ## Features
 
-* Extracts translatable strings from JSX and JavaScript (obsviously)
+* Extracts translatable strings from JSX, JavaScript as well as Typescript (obsviously)
 * Maps component names and properties to gettext variables (configurable)
 * Maps function names and arguments to gettext variables (configurable)
 * Merges identical strings found in separate files and concatenates their references
@@ -30,7 +30,7 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 Providing a config, using a single glob string:
 
 ```sh
-react-gettext-parser --config path/to/config.js --output messages.pot 'src/**/{*.js,*.jsx}'
+react-gettext-parser --config path/to/config.js --output messages.pot 'src/**/{*.js,*.jsx,*.ts,*.tsx}'
 ```
 
 Using an array of glob strings, which is passed to [`glob-all`](https://www.npmjs.com/package/glob-all):
@@ -141,19 +141,21 @@ gulp.task('build:pot', function() {
 
 ##### `extractMessages(codeStr, [options])`
 
-Parses a string with JS(X) source code for translatable strings and returns a list of message objects.
+Parses a string with JS(X) or Typescript source code for translatable strings and returns a list of message objects.
+When use with typescript source code, specify option `sourceType` as `TYPESCRIPT`
 
 ##### `extractMessagesFromFile(filePath, [options])`
 
-Parses a JS(X) file for translatable strings and returns a list of message objects.
+Parses a JS(X) or Typescript file for translatable strings and returns a list of message objects.
 
 ##### `extractMessagesFromGlob(globStr, [options])`
 
-Parses JS(X) files matching a glob for translatable strings and returns a list of message objects.
+Parses JS(X) or Typescript files matching a glob for translatable strings and returns a list of message objects.
 
 ##### `parse(code, [options], [callback])`
 
 Parses a string with JS(X) source code for translatable strings and writes a .pot file containing those strings.
+When use with typescript source code, specify option `sourceType` as `TYPESCRIPT`
 
 ##### `parseFile(filePath, [options], [callback])`
 
