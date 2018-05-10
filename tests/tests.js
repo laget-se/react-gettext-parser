@@ -270,7 +270,6 @@ describe('react-gettext-parser', () => {
 
     it('should work with both js and ts source', () => {
       const messages = extractMessagesFromGlob('tests/fixtures/Merge{A,D}.{jsx,tsx}');
-      console.log(JSON.stringify(messages, null, 2));
       expect(messages).to.have.length(1);
       expect(messages[0].comments.reference).to.have.length(2);
     });

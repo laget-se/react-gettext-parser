@@ -13,6 +13,7 @@ import { isGettextFuncCall, isGettextComponent, getFuncName, getGettextStringFro
 const noop = () => {};
 
 export const TYPESCRIPT = 'TYPESCRIPT';
+export const JAVASCRIPT = 'JAVASCRIPT';
 
 const getEmptyBlock = () => ({
   msgctxt: '',
@@ -24,14 +25,8 @@ const getEmptyBlock = () => ({
   },
 });
 
-const isTypeScript = (opt) => {
-  if (opt.sourceType === TYPESCRIPT) return true;
-  if (opt.filename) return opt.filename.endsWith('.ts') || opt.filename.endsWith('.tsx');
-  return false;
-};
-
-const getBabelParsingOptions = (useTypeScript) => {
-  if (useTypeScript) {
+const getBabelParsingOptions = (sourceType) => {
+  if (sourceType === TYPESCRIPT) {
     return { ...BABEL_PARSING_OPTS, plugins: ['typescript'].concat(BABEL_PARSING_OPTS.plugins) };
   }
   return { ...BABEL_PARSING_OPTS, plugins: ['flow'].concat(BABEL_PARSING_OPTS.plugins) };
@@ -379,7 +374,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
 export const extractMessages = (code, opts = {}) => {
   let blocks = [];
 
-  const ast = babylon.parse(code.toString('utf8'), getBabelParsingOptions(isTypeScript(opts)));
+  const ast = babylon.parse(code.toString('utf8'), getBabelParsingOptions(opts.sourceType));
   const traverser = getTraverser(_blocks => {
     blocks = _blocks;
   }, opts);
@@ -421,6 +416,7 @@ export const extractMessagesFromFile = (file, opts = {}) =>
   extractMessages(fs.readFileSync(file, 'utf8'), {
     ...opts,
     filename: file,
+    sourceType: (file.endsWith('.ts') || file.endsWith('.tsx')) ? TYPESCRIPT : JAVASCRIPT,
   });
 
 /**
