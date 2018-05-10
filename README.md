@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/react-gettext-parser.svg)](https://badge.fury.io/js/react-gettext-parser)
 [![Build Status](https://travis-ci.org/laget-se/react-gettext-parser.svg?branch=master)](https://travis-ci.org/laget-se/react-gettext-parser)
 
-A gettext utility that extracts translatable strings from JSX (and regular JavaScript) and puts them into a .pot file. It uses the [babylon](https://github.com/babel/babylon) AST parser.
+A gettext utility that extracts translatable strings from JavaScript, JSX and TypeScript and puts them into a .pot file. It uses the [babylon](https://github.com/babel/babylon) AST parser.
 
 It can be used directly in JavaScript, in gulp, [via babel](https://github.com/alexanderwallin/babel-plugin-react-gettext-parser) or as a standalone CLI utility to be used in the terminal or from npm scripts.
 
@@ -16,7 +16,7 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 
 ## Features
 
-* Extracts translatable strings from JSX, JavaScript as well as Typescript (obsviously)
+* Extracts translatable strings from JavaScript, JSX and TypeScript
 * Maps component names and properties to gettext variables (configurable)
 * Maps function names and arguments to gettext variables (configurable)
 * Merges identical strings found in separate files and concatenates their references
