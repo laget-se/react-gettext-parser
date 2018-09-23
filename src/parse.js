@@ -250,21 +250,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
           return;
         }
 
-        let value = null;
-
-        if (node.expression.type === 'StringLiteral') {
-          value = node.expression.value;
-        }
-        else if (
-          node.expression.type === 'TemplateLiteral' &&
-          node.expression.quasis !== undefined &&
-          node.expression.quasis.length > 0
-        ) {
-          const textNode = node.expression.quasis[0];
-          if (textNode.type === 'TemplateElement') {
-            value = textNode.value.raw;
-          }
-        }
+        const value = getGettextStringFromNodeArgument(node.expression);
 
         if (typeof value === 'string' && value.trim() !== '') {
           const block = getEmptyBlock();

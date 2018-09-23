@@ -17,6 +17,7 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 ## Features
 
 * Extracts translatable strings from JavaScript, JSX and TypeScript
+* Correctly handles string concatenation, e.g. `gettext('Foo ' + 'Bar')` (useful for wrapping into multiple lines)
 * Maps component names and properties to gettext variables (configurable)
 * Maps function names and arguments to gettext variables (configurable)
 * Merges identical strings found in separate files and concatenates their references

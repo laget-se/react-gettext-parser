@@ -43,6 +43,18 @@ describe('react-gettext-parser', () => {
       expect(messages[0].msgid).to.equal(expected[0].msgid);
     });
 
+    it('should correctly extract concatenated lines', () => {
+      const code = getSource('ConcatenatedStrings.jsx');
+      const messages = extractMessages(code);
+
+      expect(messages).to.have.length(5);
+      expect(messages[0].msgid).to.equal('foobar');
+      expect(messages[1].msgid).to.equal('my very long line');
+      expect(messages[2].msgid).to.equal('concatenation inside component');
+      expect(messages[3].msgid).to.equal('test string');
+      expect(messages[4].msgid).to.equal('concatenation with template literal');
+    });
+
     it('should extract translators\' comment attached to function call', () => {
       const code = getSource('FunctionWithComment.js');
       const messages = extractMessages(code);
