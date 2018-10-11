@@ -6,6 +6,7 @@ import { spy } from 'sinon';
 import { po } from 'gettext-parser';
 import fs from 'fs';
 import path from 'path';
+const converter = require('convert-newline')('lf').string();
 
 import {
   extractMessages,
@@ -291,9 +292,9 @@ describe('react-gettext-parser', () => {
       const pot = toPot(messages);
       const relevantPot = pot.split('\n\n').pop();
 
-      const expected = getSource('SingleString.pot');
+      const expected = converter(getSource('SingleString.pot'));
 
-      expect(relevantPot.trim()).to.equal(expected.trim());
+      expect(converter(relevantPot.trim())).to.equal(expected.trim());
     });
 
     it('should write empty pot when given no strings', () => {
