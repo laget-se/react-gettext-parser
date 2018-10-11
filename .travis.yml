@@ -3,8 +3,6 @@ node_js:
   - "8"
   - "5"
   - "4"
-before_install:
-  - if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
 install:
   - npm install
 script:
