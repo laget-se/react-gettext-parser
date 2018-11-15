@@ -2,7 +2,7 @@
 /* eslint no-unused-expressions: 0 */
 
 import { expect } from 'chai';
-import { spy } from 'sinon';
+import { spy, stub } from 'sinon';
 import { po } from 'gettext-parser';
 import fs from 'fs';
 import path from 'path';
@@ -290,13 +290,31 @@ describe('react-gettext-parser', () => {
   });
 
   describe('compiling to pot', () => {
+    let compileSpy = null;
+
+    beforeEach(() => {
+      compileSpy = spy(po, 'compile');
+    });
+
+    afterEach(() => {
+      po.compile.restore();
+    });
 
     it('should use gettext-parser', () => {
-      const compileSpy = spy(po, 'compile');
       toPot(getJson('SingleString.json'));
-
       expect(compileSpy.called).to.equal(true);
-      compileSpy.restore();
+    });
+
+    it('should allow for transform of headers', () => {
+      const customHeaders = {
+        'pot-creation-date': 'Sat Mar 03 2001 04:05:06 GMT+0100 (CET)',
+      };
+      const transformHeaders = stub().returns(customHeaders);
+      const messages = getJson('SingleString.json');
+      toPot(messages, { transformHeaders });
+
+      expect(transformHeaders.callCount).to.equal(1);
+      expect(compileSpy.args[0][0].headers).to.deep.equal(customHeaders);
     });
 
     it('should spit out a pot file containing an extracted string', () => {
@@ -321,7 +339,6 @@ describe('react-gettext-parser', () => {
 
       expect(pot).to.contain('#: SingleString.jsx');
     });
-
   });
 
   describe('typescript support', () => {
