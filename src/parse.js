@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import * as babylon from 'babylon';
 import traverse from '@babel/traverse';
 import curry from 'lodash.curry';
@@ -97,6 +98,18 @@ const compareReference = (a, b) => {
 };
 
 /**
+ * Returns a file path relative to the current working directory
+ */
+const getRelativeReferencePath = (filepath) => {
+  if (typeof filepath === 'string') {
+    return path.relative(process.cwd(), path.resolve(filepath));
+  }
+
+  // Return filepath as is (could be null och undefined or whatever)
+  return filepath;
+};
+
+/**
  * Takes a list of blocks and returns a list with unique ones.
  * Translator comments and source code reference comments are
  * concatenated.
@@ -148,17 +161,19 @@ export const getUniqueBlocks = blocks =>
 export const getTraverser = (cb = noop, opts = {}) => {
   const blocks = [];
 
+  // console.log('getTraverser()', opts)
+
   return {
     Program: {
-      enter(path, state = {}) {
+      enter(astPath, state = {}) {
         state.opts = {
           ...state.opts,
           ...opts,
-          filename: state.file ? state.file.opts.filename : opts.filename,
+          filename: getRelativeReferencePath(state.file ? state.file.opts.filename : opts.filename),
         };
       },
 
-      exit(path, state = {}) {
+      exit(astPath, state = {}) {
         cb(getUniqueBlocks(blocks), { opts: (state.opts || opts) });
       },
     },
@@ -169,8 +184,8 @@ export const getTraverser = (cb = noop, opts = {}) => {
      *  <GetText message="My string" comment="Some clarifying comment" />
      */
     JSXOpeningElement: {
-      enter(path, state = {}) {
-        const { node, parent } = path;
+      enter(astPath, state = {}) {
+        const { node, parent } = astPath;
         const envOpts = state.opts || opts;
         const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
 
@@ -186,7 +201,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
 
         if (envOpts.filename) {
           block.comments.reference = [{
-            filename: envOpts.filename,
+            filename: getRelativeReferencePath(envOpts.filename),
             line: node.loc.start.line,
             column: node.loc.start.column,
           }];
@@ -202,8 +217,8 @@ export const getTraverser = (cb = noop, opts = {}) => {
      *  <GetText>My string</GetText>
      */
     JSXText: {
-      enter(path, state = {}) {
-        const { node, parent } = path;
+      enter(astPath, state = {}) {
+        const { node, parent } = astPath;
         const envOpts = state.opts || opts;
         const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
 
@@ -220,7 +235,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
 
         if (envOpts.filename) {
           block.comments.reference = [{
-            filename: envOpts.filename,
+            filename: getRelativeReferencePath(envOpts.filename),
             line: node.loc.start.line,
             column: node.loc.start.column,
           }];
@@ -237,8 +252,8 @@ export const getTraverser = (cb = noop, opts = {}) => {
      * <GetText>{`Text inside backticks`}</GetText>
      */
     JSXExpressionContainer: {
-      enter(path, state = {}) {
-        const { node, parent } = path;
+      enter(astPath, state = {}) {
+        const { node, parent } = astPath;
         const envOpts = state.opts || opts;
         const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
 
@@ -258,7 +273,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
 
           if (envOpts.filename) {
             block.comments.reference = [{
-              filename: envOpts.filename,
+              filename: getRelativeReferencePath(envOpts.filename),
               line: node.loc.start.line,
               column: node.loc.start.column,
             }];
@@ -274,8 +289,8 @@ export const getTraverser = (cb = noop, opts = {}) => {
      * ngettext('One item', '{{ count }} items');
      */
     CallExpression: {
-      enter(path, state = {}) {
-        const { node, parent } = path;
+      enter(astPath, state = {}) {
+        const { node, parent } = astPath;
         const envOpts = state.opts || opts;
 
         const funcArgsMap = envOpts.funcArgumentsMap || GETTEXT_FUNC_ARGS_MAP;
@@ -343,7 +358,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
 
         if (envOpts.filename) {
           block.comments.reference = [{
-            filename: envOpts.filename,
+            filename: getRelativeReferencePath(envOpts.filename),
             line: node.loc.start.line,
             column: node.loc.start.column,
           }];

@@ -379,6 +379,22 @@ describe('react-gettext-parser', () => {
 
       expect(pot).to.contain('#: SingleString.jsx');
     });
+
+    it('should make source code reference paths relative', () => {
+      const absolutePath = path.join(__dirname, 'fixtures', 'SingleString.js');
+      const absoluteMessages = extractMessagesFromFile(absolutePath);
+      expect(absoluteMessages[0].comments.reference[0].filename).to.equal('tests/fixtures/SingleString.js');
+
+      const dottedPath = './tests/fixtures/SingleString.js';
+      const dottedMessages = extractMessagesFromFile(dottedPath);
+      expect(dottedMessages[0].comments.reference[0].filename).to.equal('tests/fixtures/SingleString.js');
+
+      const glob = ['./tests/fixtures/{*.js,*.jsx,*.ts,*.tsx}'];
+      const globMessages = extractMessagesFromGlob(glob);
+      globMessages.forEach(message => {
+        expect(/^tests\//.test(message.comments.reference[0].filename)).to.equal(true);
+      });
+    });
   });
 
   describe('typescript support', () => {
