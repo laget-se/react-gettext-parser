@@ -420,7 +420,11 @@ export const extractMessagesFromGlob = (globArr, opts = {}) => {
  */
 export const parse = (code, opts = {}, cb = noop) => {
   const blocks = extractMessages(code, opts);
-  outputPot(opts.output, toPot(blocks), cb);
+  outputPot(
+    opts.output,
+    toPot(blocks, { transformHeaders: opts.transformHeaders }),
+    cb
+  );
 };
 
 /**
@@ -434,5 +438,11 @@ export const parseFile = (file, opts = {}, cb = noop) =>
  * Parses all files matching a glob and extract blocks from all of them,
  * then writing them to a .pot file
  */
-export const parseGlob = (globArr, opts = {}, cb = noop) =>
-  outputPot(opts.output, toPot(extractMessagesFromGlob(globArr, opts)), cb);
+export const parseGlob = (globArr, opts = {}, cb = noop) => {
+  const blocks = extractMessagesFromGlob(globArr, opts);
+  outputPot(
+    opts.output,
+    toPot(blocks, { transformHeaders: opts.transformHeaders }),
+    cb
+  );
+};
