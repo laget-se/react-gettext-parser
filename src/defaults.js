@@ -35,6 +35,8 @@ export const BABEL_PARSING_OPTS = {
     'decorators',
     'classProperties',
     'exportExtensions',
+    'exportDefaultFrom',
+    'exportNamespaceFrom',
     'exponentiationOperator',
     'asyncGenerators',
     'functionBind',
