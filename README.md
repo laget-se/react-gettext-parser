@@ -168,7 +168,11 @@ Parses JS(X) files matching a glob for translatable strings and writes a .pot fi
 
 ### Converting messages to a POT string
 
-##### `toPot(messages)`
+##### `toPot(messages, [opts])`
+
+Turns an array of messages into a POT string.
+
+* `opts.transformHeaders` - A function that takes an object containing default POT headers and returns an object containing transformed POT headers. The default is to return the default headers as is.
 
 ### Writing POT contents to file
 

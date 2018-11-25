@@ -40,9 +40,18 @@ const convertCommentArraysToStrings = (blocks) =>
     },
   }));
 
-export const toPot = (blocks) => {
+export const toPot = (blocks, opts = {}) => {
   const parsedBlocks = convertCommentArraysToStrings(blocks);
-  const pot = po.compile(createTranslationsTable(parsedBlocks));
+  const potJson = createTranslationsTable(parsedBlocks);
+
+  // Allow the consumer to transform headers
+  const transformHeaders = opts.transformHeaders ? opts.transformHeaders : x => x;
+  const transformedPotJson = {
+    ...potJson,
+    headers: transformHeaders(potJson.headers),
+  };
+
+  const pot = po.compile(transformedPotJson);
 
   return pot.toString();
 };

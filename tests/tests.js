@@ -2,7 +2,7 @@
 /* eslint no-unused-expressions: 0 */
 
 import { expect } from 'chai';
-import { spy } from 'sinon';
+import { spy, stub } from 'sinon';
 import { po } from 'gettext-parser';
 import fs from 'fs';
 import path from 'path';
@@ -14,6 +14,8 @@ import {
   extractMessagesFromGlob,
   toPot,
 } from '../src/index.js';
+import * as parsers from '../src/parse.js'
+import * as io from '../src/io.js'
 import { TYPESCRIPT } from '../src';
 
 const getSource = file => fs.readFileSync(path.join(__dirname, 'fixtures', file), 'utf8');
@@ -290,13 +292,69 @@ describe('react-gettext-parser', () => {
   });
 
   describe('compiling to pot', () => {
+    let compileSpy = null;
+
+    beforeEach(() => {
+      compileSpy = spy(po, 'compile');
+    });
+
+    afterEach(() => {
+      po.compile.restore();
+    });
 
     it('should use gettext-parser', () => {
-      const compileSpy = spy(po, 'compile');
       toPot(getJson('SingleString.json'));
-
       expect(compileSpy.called).to.equal(true);
-      compileSpy.restore();
+    });
+
+    describe('should allow for transform of headers', () => {
+      let transformHeaders = null;
+      const customHeaders = {
+        'pot-creation-date': 'Sat Mar 03 2001 04:05:06 GMT+0100 (CET)',
+      };
+
+      beforeEach(() => {
+        stub(io, 'outputPot');
+        transformHeaders = stub().returns(customHeaders);
+      });
+
+      afterEach(() => {
+        io.outputPot.restore();
+      });
+
+      it('in toPot()', () => {
+        const messages = getJson('SingleString.json');
+        toPot(messages, { transformHeaders });
+
+        expect(transformHeaders.callCount).to.equal(1);
+        expect(compileSpy.args[0][0].headers).to.deep.equal(customHeaders);
+      });
+
+      it('via parse()', () => {
+        const code = getSource('SingleString.jsx');
+        parsers.parse(code, { transformHeaders });
+
+        expect(transformHeaders.called).to.equal(true);
+      });
+
+      it('via parseFile()', () => {
+        const code = getSource('SingleString.jsx');
+        stub(fs, 'readFileSync').returns(code);
+        parsers.parseFile('file.js', { transformHeaders });
+
+        expect(transformHeaders.called).to.equal(true);
+        fs.readFileSync.restore();
+      });
+
+      it('via parseGlob()', () => {
+        const messages = getJson('SingleString.json');
+        stub(parsers, 'extractMessagesFromGlob').returns(messages);
+        parsers.parseGlob(['all/the/files/*.js'], { transformHeaders });
+
+        expect(transformHeaders.called).to.equal(true);
+
+        parsers.extractMessagesFromGlob.restore();
+      });
     });
 
     it('should spit out a pot file containing an extracted string', () => {
@@ -321,7 +379,6 @@ describe('react-gettext-parser', () => {
 
       expect(pot).to.contain('#: SingleString.jsx');
     });
-
   });
 
   describe('typescript support', () => {
