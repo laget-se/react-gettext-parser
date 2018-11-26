@@ -446,8 +446,10 @@ export const parse = (code, opts = {}, cb = noop) => {
  * Parses a file at a given path for gettext blocks and writes them
  * to a .pot file
  */
-export const parseFile = (file, opts = {}, cb = noop) =>
-  parse(fs.readFileSync(file, 'utf8'), opts, cb);
+export const parseFile = (file, opts = {}, cb = noop) => {
+  const blocks = extractMessagesFromFile(file, opts);
+  outputPot(opts.output, toPot(blocks), cb);
+};
 
 /**
  * Parses all files matching a glob and extract blocks from all of them,
