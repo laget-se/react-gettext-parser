@@ -448,7 +448,11 @@ export const parse = (code, opts = {}, cb = noop) => {
  */
 export const parseFile = (file, opts = {}, cb = noop) => {
   const blocks = extractMessagesFromFile(file, opts);
-  outputPot(opts.output, toPot(blocks), cb);
+  outputPot(
+    opts.output,
+    toPot(blocks, { transformHeaders: opts.transformHeaders }),
+    cb
+  );
 };
 
 /**
