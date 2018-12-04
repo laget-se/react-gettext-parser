@@ -161,8 +161,6 @@ export const getUniqueBlocks = blocks =>
 export const getTraverser = (cb = noop, opts = {}) => {
   const blocks = [];
 
-  // console.log('getTraverser()', opts)
-
   return {
     Program: {
       enter(astPath, state = {}) {
