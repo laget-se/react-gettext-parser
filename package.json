@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/laget-se/react-gettext-parser#readme",
   "dependencies": {
-    "@babel/traverse": "7.0.0-beta.44",
+    "@babel/traverse": "^7.1.6",
     "babylon": "^7.0.0-beta.44",
     "colors": "^1.1.2",
     "convert-newline": "0.0.5",
@@ -55,10 +55,10 @@
     "yargs": "^4.4.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.0.0-beta.44",
-    "@babel/core": "7.0.0-beta.44",
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
     "@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.44",
-    "@babel/preset-env": "7.0.0-beta.44",
+    "@babel/preset-env": "^7.2.0",
     "@babel/register": "^7.0.0-beta.44",
     "babel-eslint": "^6.0.2",
     "chai": "^3.5.0",
