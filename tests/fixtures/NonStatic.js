@@ -1,8 +1,8 @@
 import React from 'react';
-import { GetText, gt } from 'gettext-lib';
+import { GetText, gt } from 'gettext-lib';
 
-const messageString = "Translate me";
-const messageFunction = () => "Translate me";
+const messageString = 'Translate me';
+const messageFunction = () => 'Translate me';
 const MessageComponent = () => <div>Translate me</div>;
 
 
@@ -10,10 +10,10 @@ const NonStatic = () =>
   <div>
     <GetText message={messageString} messagePlural="" />
     <GetText message={messageString} messagePlural="non-empty plural" count={2} context="context" />
-    
+
     <GetText message={messageFunction()} messagePlural="" />
     <GetText message={messageFunction()} messagePlural="non-empty plural" count={2} context="context" />
-    
+
     <GetText message={<MessageComponent />} messagePlural="" />
     <GetText message={<MessageComponent />} messagePlural="non-empty plural" count={2} context="context" />
 

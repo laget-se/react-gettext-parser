@@ -1,15 +1,16 @@
+/* eslint react/prop-types: 0 */
 import React from 'react';
 import { GetText, npgettext } from 'gettext-lib';
 
-export const Comp = ({ value, separator }) =>
+export const Comp = ({ value }) =>
   <div>
     <GetText
-      message={`Value is: {{ value }}`}
-      messagePlural={`Values are: {{ value }}`}
+      message={'Value is: {{ value }}'}
+      messagePlural={'Values are: {{ value }}'}
       scope={{ value }}
-      comment={`Comment`}
-      context={`context`}
+      comment={'Comment'}
+      context={'context'}
     />
 
-    {npgettext(`context`, `One thing`, `Many things`)}
+    {npgettext('context', 'One thing', 'Many things')}
   </div>;

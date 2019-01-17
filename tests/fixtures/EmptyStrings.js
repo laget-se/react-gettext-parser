@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetText, gt } from 'gettext-lib';
+import { GetText, gt } from 'gettext-lib';
 
 const EmptyStrings = () =>
   <div>

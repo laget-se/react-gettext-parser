@@ -14,17 +14,15 @@ import {
   extractMessagesFromGlob,
   toPot,
 } from '../src/index.js';
-import * as parsers from '../src/parse.js'
-import * as io from '../src/io.js'
+import * as parsers from '../src/parse.js';
+import * as io from '../src/io.js';
 import { TYPESCRIPT } from '../src';
 
 const getSource = file => fs.readFileSync(path.join(__dirname, 'fixtures', file), 'utf8');
 const getJson = file => require(`./fixtures/${file}`);
 
 describe('react-gettext-parser', () => {
-
   describe('basic extraction', () => {
-
     it('should extract a message from jsx', () => {
       const code = getSource('SingleString.jsx');
       const messages = extractMessages(code);
@@ -108,14 +106,12 @@ describe('react-gettext-parser', () => {
       const messages = extractMessages(code);
 
       expect(messages).to.have.length(2);
-      expect(messages[0].msgid).to.equal(`I'm inside curly braces`);
-      expect(messages[1].msgid).to.equal(`I'm inside backticks inside curly braces`);
+      expect(messages[0].msgid).to.equal('I\'m inside curly braces');
+      expect(messages[1].msgid).to.equal('I\'m inside backticks inside curly braces');
     });
-
   });
 
   describe('plural extraction', () => {
-
     it('extracts plural blocks from both function calls and components', () => {
       const code = getSource('Plurals.js');
       const messages = extractMessages(code);
@@ -126,11 +122,9 @@ describe('react-gettext-parser', () => {
       expect(messages[1].msgid_plural).to.not.be.empty;
       expect(messages[1].msgstr).to.eql(['', '']);
     });
-
   });
 
   describe('customization', () => {
-
     it('should parse strings from custom jsx components', () => {
       const messages = extractMessagesFromFile('tests/fixtures/CustomComponent.jsx', {
         componentPropsMap: {
@@ -288,7 +282,6 @@ describe('react-gettext-parser', () => {
       expect(messages).to.have.length(1);
       expect(messages[0].comments.reference).to.have.length(2);
     });
-
   });
 
   describe('compiling to pot', () => {
@@ -398,7 +391,6 @@ describe('react-gettext-parser', () => {
   });
 
   describe('typescript support', () => {
-
     it('should extract a message from ts', () => {
       const code = getSource('SingleString.tsx');
       const messages = extractMessages(code, { sourceType: TYPESCRIPT });
@@ -422,7 +414,5 @@ describe('react-gettext-parser', () => {
       expect(references[0].line).to.equal(11);
       expect(references[0].column).to.equal(4);
     });
-
   });
-
 });
