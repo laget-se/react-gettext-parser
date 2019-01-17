@@ -390,6 +390,13 @@ describe('react-gettext-parser', () => {
     });
   });
 
+  describe('ast parsing', () => {
+    it('should support the React fragment short syntax <></>', () => {
+      const messages = extractMessagesFromFile('tests/fixtures/FragmentShortSyntax.js');
+      expect(messages.length).to.equal(1);
+    });
+  });
+
   describe('typescript support', () => {
     it('should extract a message from ts', () => {
       const code = getSource('SingleString.tsx');
