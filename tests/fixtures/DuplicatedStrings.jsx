@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { GetText, npgettext } from 'gettext-lib';
 

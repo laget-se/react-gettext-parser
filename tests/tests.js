@@ -236,7 +236,7 @@ describe('react-gettext-parser', () => {
       const messages = extractMessagesFromFile('tests/fixtures/SingleString.js');
       expect(messages).to.have.length(1);
       const references = messages[0].comments.reference;
-      expect(references[0].line).to.equal(7);
+      expect(references[0].line).to.equal(6);
       expect(references[0].column).to.equal(6);
     });
 
@@ -246,8 +246,8 @@ describe('react-gettext-parser', () => {
 
       const references = messages[0].comments.reference;
       expect(references).to.have.length(2);
-      expect(references[0].line).to.equal(8);
-      expect(references[1].line).to.equal(10);
+      expect(references[0].line).to.equal(7);
+      expect(references[1].line).to.equal(9);
       expect(references[0].column).to.equal(6);
       expect(references[1].column).to.equal(4);
     });
