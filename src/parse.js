@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import * as babylon from 'babylon';
+import * as parser from '@babel/parser';
 import traverse from '@babel/traverse';
 import curry from 'lodash.curry';
 import uniq from 'lodash.uniq';
@@ -376,7 +376,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
 export const extractMessages = (code, opts = {}) => {
   let blocks = [];
 
-  const ast = babylon.parse(code.toString('utf8'), getBabelParsingOptions(opts.sourceType));
+  const ast = parser.parse(code.toString('utf8'), getBabelParsingOptions(opts.sourceType));
   const traverser = getTraverser(_blocks => {
     blocks = _blocks;
   }, opts);
