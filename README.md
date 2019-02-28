@@ -23,6 +23,8 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 * Merges identical strings found in separate files and concatenates their references
 * Writes .pot content to a specified output file
 * Supports globs
+* Supports flow type
+
 
 ## Usage
 
