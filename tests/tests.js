@@ -422,4 +422,14 @@ describe('react-gettext-parser', () => {
       expect(references[0].column).to.equal(4);
     });
   });
+
+  describe('flow support', () => {
+    it('should parse flow typed javascript', () => {
+      const code = getSource('SingleStringFlow.js');
+      const messages = extractMessages(code);
+      const expected = getJson('SingleString.json');
+      expect(messages).to.have.length(1);
+      expect(messages[0].msgid).to.equal(expected[0].msgid);
+    });
+  });
 });
