@@ -32,7 +32,7 @@ export const BABEL_PARSING_OPTS = {
     'doExpressions',
     'trailingFunctionCommas',
     'objectRestSpread',
-    'decoratorsLegacy',
+    'decorators-legacy',
     'classProperties',
     'exportExtensions',
     'exportDefaultFrom',
