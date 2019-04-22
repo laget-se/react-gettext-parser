@@ -116,7 +116,7 @@ describe('react-gettext-parser', () => {
 
       expect(messages).to.have.length(1);
       expect(messages[0].msgid).to.equal('Decorate me');
-    })
+    });
   });
 
   describe('plural extraction', () => {
