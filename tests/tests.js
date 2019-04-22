@@ -109,6 +109,14 @@ describe('react-gettext-parser', () => {
       expect(messages[0].msgid).to.equal('I\'m inside curly braces');
       expect(messages[1].msgid).to.equal('I\'m inside backticks inside curly braces');
     });
+
+    it('should support decorators', () => {
+      const code = getSource('DecoratoredComponent.jsx');
+      const messages = extractMessages(code);
+
+      expect(messages).to.have.length(1);
+      expect(messages[0].msgid).to.equal('Decorate me');
+    })
   });
 
   describe('plural extraction', () => {
