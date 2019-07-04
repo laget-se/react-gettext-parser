@@ -52,6 +52,7 @@
     "lodash.groupby": "^4.3.0",
     "lodash.uniq": "^4.2.1",
     "through2": "^2.0.1",
+    "vue-parser": "^1.1.6",
     "yargs": "^4.4.0"
   },
   "devDependencies": {

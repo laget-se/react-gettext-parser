@@ -6,6 +6,8 @@ import curry from 'lodash.curry';
 import uniq from 'lodash.uniq';
 import glob from 'glob-all';
 
+const vueParser = require('vue-parser')
+
 import { GETTEXT_FUNC_ARGS_MAP, GETTEXT_COMPONENT_PROPS_MAP, BABEL_PARSING_OPTS } from './defaults';
 import { outputPot } from './io';
 import { toPot } from './json2pot';
@@ -414,12 +416,21 @@ export const extractMessages = (code, opts = {}) => {
 /**
  * Parses and returns extracted gettext blocks from a file at a given path
  */
-export const extractMessagesFromFile = (file, opts = {}) =>
-  extractMessages(fs.readFileSync(file, 'utf8'), {
+export const extractMessagesFromFile = (file, opts = {}) => {
+  if (file.endsWith('.vue')) {
+    const scripts = vueParser.parse(fs.readFileSync(file, 'utf8'), 'script')
+    return extractMessages(scripts, {
+      ...opts,
+      filename: file,
+      sourceType: JAVASCRIPT,
+    });
+  }
+  return extractMessages(fs.readFileSync(file, 'utf8'), {
     ...opts,
     filename: file,
     sourceType: (file.endsWith('.ts') || file.endsWith('.tsx')) ? TYPESCRIPT : JAVASCRIPT,
   });
+}
 
 /**
  * Parses and returns extracted gettext blocks from all files matching a glob
