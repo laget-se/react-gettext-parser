@@ -220,12 +220,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
         const envOpts = state.opts || opts;
         const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
 
-        // parent.openingElement can be undefined when using fragment short syntax <>...</>
-        if (!parent.openingElement) {
-          return;
-        }
-
-        if (isGettextComponent(Object.keys(propsMap), parent.openingElement) === false) {
+        if (!isGettextComponent(Object.keys(propsMap), parent.openingElement)) {
           return;
         }
 
@@ -256,11 +251,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
         const envOpts = state.opts || opts;
         const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
 
-        if (
-          parent.openingElement === undefined ||
-          parent.openingElement.type !== 'JSXOpeningElement' ||
-          isGettextComponent(Object.keys(propsMap), parent.openingElement) === false
-        ) {
+        if (!isGettextComponent(Object.keys(propsMap), parent.openingElement)) {
           return;
         }
 
