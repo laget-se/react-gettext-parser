@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { gettext } from 'gettext-lib';
 
 const FragmentShortComponent = () => (
   <>
-    { gettext('Fragment short syntax') }
+    { gettext('Fragment short syntax') }: {'foo'}
   </>
 );
 

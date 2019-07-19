@@ -227,6 +227,10 @@ export const getTraverser = (cb = noop, opts = {}) => {
           return;
         }
 
+        if (!parent.openingElement) {
+          return;
+        }
+
         if (isGettextComponent(Object.keys(propsMap), parent.openingElement) === false) {
           return;
         }

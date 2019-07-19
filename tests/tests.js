@@ -400,7 +400,7 @@ describe('react-gettext-parser', () => {
 
   describe('ast parsing', () => {
     it('should support the React fragment short syntax <></>', () => {
-      const messages = extractMessagesFromFile('tests/fixtures/FragmentShortSyntax.js');
+      const messages = extractMessagesFromFile('tests/fixtures/FragmentShortSyntax.jsx');
       expect(messages.length).to.equal(1);
     });
   });
