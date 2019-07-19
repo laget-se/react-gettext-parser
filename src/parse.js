@@ -220,7 +220,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
         const envOpts = state.opts || opts;
         const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
 
-        if (!isGettextComponent(Object.keys(propsMap), parent.openingElement)) {
+        if (isGettextComponent(Object.keys(propsMap), parent.openingElement) === false) {
           return;
         }
 
@@ -251,7 +251,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
         const envOpts = state.opts || opts;
         const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
 
-        if (!isGettextComponent(Object.keys(propsMap), parent.openingElement)) {
+        if (isGettextComponent(Object.keys(propsMap), parent.openingElement) === false) {
           return;
         }
 
