@@ -1,7 +1,8 @@
 
 import path from 'path';
 import through from 'through2';
-import { File, PluginError } from 'gulp-util';
+import Vinyl from 'vinyl';
+import PluginError from 'plugin-error';
 import colors from 'colors';
 
 import { toPot } from './json2pot';
@@ -48,7 +49,7 @@ export const gulp = (opts = {}) => {
   function write(cb) {
     allMessages = getUniqueBlocks(allMessages);
 
-    const potFile = new File({
+    const potFile = new Vinyl({
       base: process.cwd(),
       path: options.output,
       contents: new Buffer(toPot(allMessages)),
