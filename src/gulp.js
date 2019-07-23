@@ -21,9 +21,6 @@ export const gulp = (opts = {}) => {
   };
 
   function read(file, enc, cb) {
-    console.log(Object.keys(file));
-    console.log(file.history);
-
     if (file.isNull()) {
       return cb();
     }
