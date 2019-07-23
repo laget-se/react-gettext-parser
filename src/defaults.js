@@ -9,7 +9,7 @@ export const GETTEXT_FUNC_ARGS_MAP = {
   dpgettext: [null, 'msgctxt', 'msgid'],
   npgettext: ['msgctxt', 'msgid', 'msgid_plural'],
   dnpgettext: [null, 'msgctxt', 'msgid', 'msgid_plural'],
-};
+}
 
 // Default mappings between gettext components' attributes and their
 // corresponding .pot keys
@@ -20,7 +20,7 @@ export const GETTEXT_COMPONENT_PROPS_MAP = {
     context: 'msgctxt',
     comment: 'comment',
   },
-};
+}
 
 // Default parsing options
 export const BABEL_PARSING_OPTS = {
@@ -43,4 +43,4 @@ export const BABEL_PARSING_OPTS = {
     'functionSent',
     'dynamicImport',
   ],
-};
+}

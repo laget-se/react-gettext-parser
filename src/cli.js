@@ -1,10 +1,10 @@
+import path from 'path'
+import colors from 'colors'
+import yargs from 'yargs'
 
-import path from 'path';
-import colors from 'colors';
+import { parseGlob } from './parse.js'
 
-import { parseGlob } from './parse';
-
-const args = require('yargs')
+const args = yargs
   .usage('react-gettext-parser <options> glob [, glob, ...]')
   .help('h')
   .alias('h', 'help')
@@ -22,26 +22,27 @@ const args = require('yargs')
   })
   .option('trim-lines', {
     type: 'boolean',
-    description: 'Trims each line in extracted strings from surrounding whitespace',
+    description:
+      'Trims each line in extracted strings from surrounding whitespace',
   })
   .option('trim-newlines', {
     type: 'boolean',
     description: 'Trims extracted strings from new-lines',
-  })
-  .argv;
+  }).argv
 
-const filesGlob = args._;
+const filesGlob = args._
 
 let opts = {
   output: args.output,
   trim: args.trim,
   trimLines: args['trim-lines'],
   trimNewlines: args['trim-newlines'],
-};
-
-if (args.config) {
-  const configs = require(path.join(process.cwd(), args.config));
-  opts = { ...opts, ...configs };
 }
 
-parseGlob(filesGlob, opts);
+if (args.config) {
+  // eslint-disable-next-line
+  const configs = require(path.join(process.cwd(), args.config))
+  opts = { ...opts, ...configs }
+}
+
+parseGlob(filesGlob, opts)
