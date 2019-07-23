@@ -220,13 +220,6 @@ export const getTraverser = (cb = noop, opts = {}) => {
         const envOpts = state.opts || opts;
         const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
 
-        // Using fragment short syntax <>...</> yields JSXText paths with
-        // whitespace content and no name property, so this check is best
-        // done before invoking isGettextComponent().
-        if (node.value.trim() === '') {
-          return;
-        }
-
         if (isGettextComponent(Object.keys(propsMap), parent.openingElement) === false) {
           return;
         }
@@ -258,11 +251,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
         const envOpts = state.opts || opts;
         const propsMap = envOpts.componentPropsMap || GETTEXT_COMPONENT_PROPS_MAP;
 
-        if (
-          parent.openingElement === undefined ||
-          parent.openingElement.type !== 'JSXOpeningElement' ||
-          isGettextComponent(Object.keys(propsMap), parent.openingElement) === false
-        ) {
+        if (isGettextComponent(Object.keys(propsMap), parent.openingElement) === false) {
           return;
         }
 
