@@ -3,13 +3,12 @@
 [![npm version](https://badge.fury.io/js/react-gettext-parser.svg)](https://badge.fury.io/js/react-gettext-parser)
 [![Build Status](https://travis-ci.org/laget-se/react-gettext-parser.svg?branch=master)](https://travis-ci.org/laget-se/react-gettext-parser)
 
-A gettext utility that extracts translatable strings from JavaScript, JSX and TypeScript and puts them into a .pot file. It uses the [babylon](https://github.com/babel/babylon) AST parser.
-
-It can be used directly in JavaScript, in gulp, [via babel](https://github.com/alexanderwallin/babel-plugin-react-gettext-parser) or as a standalone CLI utility to be used in the terminal or from npm scripts.
+`react-gettext-parser` is a tool that searches your code for strings that are meant to be translated, extracts them and puts them into a well-formatted Gettext .pot file. Simply configure what your translation functions and/or React components are named and what parameters they accept, and then use the CLI or JavaScript API to collect your app or website's translatable contents in seconds.
 
 * [Features](#features)
 * [Usage](#usage)
 * [API](#api)
+* [Options](#options)
 * [Developing](#developing)
 * [See also](#see-also)
 * [License](#license)
@@ -17,7 +16,7 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 ## Features
 
 * Extracts translatable strings from JavaScript, JSX and TypeScript
-* Maps component names and properties to gettext variables (configurable)
+* Maps React component names and props to gettext variables (configurable)
 * Maps function names and arguments to gettext variables (configurable)
 * Merges identical strings found in separate files and concatenates their references
 * Writes .pot content to a specified output file
@@ -25,12 +24,11 @@ It can be used directly in JavaScript, in gulp, [via babel](https://github.com/a
 * Supports flow type
 * Supports string concatenation, e.g. `gettext('Foo ' + 'Bar')` (useful for wrapping into multiple lines)
 
-
 ## Usage
 
 ### Using the CLI
 
-Providing a config, using a single glob string:
+Providing a [config](#configuration-file), using a single glob string:
 
 ```sh
 react-gettext-parser --config path/to/config.js --output messages.pot 'src/**/{*.js,*.jsx,*.ts,*.tsx}'
@@ -288,6 +286,28 @@ Default: `false`
 Trims extracted strings from new-lines.
 
 Default: `false`
+
+### Configuration file
+
+The `react-gettext-parser` CLI accepts a `--config <file path>` argument. This should point to a JavaScript or JSON file that exports an object with any or all of the available options as root properties. Here's an example:
+
+```js
+// react-gettext-parser.config.js
+exports default {
+  componentPropsMap: {
+    Translate: {
+      one: 'msgid',
+      many: 'msgid_plural',
+      context: 'msgctxt',
+      comment: 'comment',
+    }
+  },
+  funcArgumentsMap: {
+    translate: ['msgid', 'msgid_plural', 'msgctxt'],
+  },
+  trim: true,
+}
+```
 
 ## Developing
 
