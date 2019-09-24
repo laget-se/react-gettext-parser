@@ -293,7 +293,7 @@ The `react-gettext-parser` CLI accepts a `--config <file path>` argument. This s
 
 ```js
 // react-gettext-parser.config.js
-exports default {
+module.exports = {
   componentPropsMap: {
     Translate: {
       one: 'msgid',
