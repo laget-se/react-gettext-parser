@@ -500,4 +500,13 @@ describe('react-gettext-parser', () => {
       expect(messages[0].msgid).to.equal(expected[0].msgid)
     })
   })
+
+  describe('optional chaining support', () => {
+    it('should parse javascript that contains optional chaining', () => {
+      const code = getSource('OptionalChaining.js')
+      const messages = extractMessages(code)
+      expect(messages).to.have.length(1)
+      expect(messages[0].msgid).to.equal('Optional chaining works')
+    })
+  })
 })
