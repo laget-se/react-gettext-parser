@@ -483,7 +483,7 @@ export const parse = (code, opts = {}, cb = noop) => {
     toPot(blocks, {
       transformHeaders: opts.transformHeaders,
       disableLineNumbers: opts.disableLineNumbers,
-     }),
+    }),
     cb
   )
 }
@@ -499,7 +499,7 @@ export const parseFile = (file, opts = {}, cb = noop) => {
     toPot(blocks, {
       transformHeaders: opts.transformHeaders,
       disableLineNumbers: opts.disableLineNumbers,
-     }),
+    }),
     cb
   )
 }
@@ -515,7 +515,7 @@ export const parseGlob = (globArr, opts = {}, cb = noop) => {
     toPot(blocks, {
       transformHeaders: opts.transformHeaders,
       disableLineNumbers: opts.disableLineNumbers,
-     }),
+    }),
     cb
   )
 }

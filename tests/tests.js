@@ -360,12 +360,13 @@ describe('react-gettext-parser', () => {
 
     it('should allow line numbers to be disabled', () => {
       const messages = extractMessagesFromFile('tests/fixtures/SingleString.js')
-      const pot = toPot(messages, {disableLineNumbers: true});
-      const reference = pot.split('\n')
-        .find(line => line.startsWith('#: tests/fixtures/SingleString.js'));
-      expect(reference).to.equal('#: tests/fixtures/SingleString.js');
+      const pot = toPot(messages, { disableLineNumbers: true })
+      const reference = pot
+        .split('\n')
+        .find(line => line.startsWith('#: tests/fixtures/SingleString.js'))
+      expect(reference).to.equal('#: tests/fixtures/SingleString.js')
     })
-    
+
     describe('should allow for transform of headers', () => {
       let transformHeaders = null
       const customHeaders = {

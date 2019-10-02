@@ -30,11 +30,11 @@ const createTranslationsTable = (blocks, headers = {}) => {
 }
 
 const convertReferenceToString = (reference, disableLineNumbers) =>
-disableLineNumbers
+  disableLineNumbers
     ? `${reference.filename}`
-    : `${reference.filename}:${reference.line}`;
+    : `${reference.filename}:${reference.line}`
 
-const convertCommentArraysToStrings = (blocks, disableLineNumbers=false) =>
+const convertCommentArraysToStrings = (blocks, disableLineNumbers = false) =>
   blocks.map(b => ({
     ...b,
     comments: {
@@ -46,7 +46,10 @@ const convertCommentArraysToStrings = (blocks, disableLineNumbers=false) =>
   }))
 
 export const toPot = (blocks, opts = {}) => {
-  const parsedBlocks = convertCommentArraysToStrings(blocks, opts.disableLineNumbers)
+  const parsedBlocks = convertCommentArraysToStrings(
+    blocks,
+    opts.disableLineNumbers
+  )
   const potJson = createTranslationsTable(parsedBlocks)
 
   // Allow the consumer to transform headers
