@@ -46,13 +46,14 @@ The entire help section for ya:
 react-gettext-parser <options> glob [, glob, ...]
 
 Options:
-  -h, --help       Show help                                          [boolean]
-  -o, --output     Path to output .pot file
-  -c, --config     Path to a react-gettext-parser config file
-  --trim           Trims extracted strings from surrounding whitespace[boolean]
-  --trim-lines     Trims each line in extracted strings from surrounding
-                   whitespace                                         [boolean]
-  --trim-newlines  Trims extracted strings from new-lines             [boolean]
+  -h, --help             Show help                                          [boolean]
+  -o, --output           Path to output .pot file
+  -c, --config           Path to a react-gettext-parser config file
+  --trim                 Trims extracted strings from surrounding whitespace[boolean]
+  --trim-lines           Trims each line in extracted strings from surrounding
+                         whitespace                                         [boolean]
+  --trim-newlines        Trims extracted strings from new-lines             [boolean]
+  --disable-line-numbers Disables line number ouput in .pot file            [boolean]
 ```
 
 ### Using the API
@@ -284,6 +285,12 @@ Default: `false`
 ##### `trimNewlines` (`--trim-newlines`)
 
 Trims extracted strings from new-lines.
+
+Default: `false`
+
+##### `disableLineNumbers` (`--disable-line-numbers`)
+
+Disables line number ouput in .pot file
 
 Default: `false`
 

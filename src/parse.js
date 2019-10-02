@@ -480,7 +480,10 @@ export const parse = (code, opts = {}, cb = noop) => {
   const blocks = extractMessages(code, opts)
   outputPot(
     opts.output,
-    toPot(blocks, { transformHeaders: opts.transformHeaders }),
+    toPot(blocks, {
+      transformHeaders: opts.transformHeaders,
+      disableLineNumbers: opts.disableLineNumbers,
+     }),
     cb
   )
 }
@@ -493,7 +496,10 @@ export const parseFile = (file, opts = {}, cb = noop) => {
   const blocks = extractMessagesFromFile(file, opts)
   outputPot(
     opts.output,
-    toPot(blocks, { transformHeaders: opts.transformHeaders }),
+    toPot(blocks, {
+      transformHeaders: opts.transformHeaders,
+      disableLineNumbers: opts.disableLineNumbers,
+     }),
     cb
   )
 }
@@ -506,7 +512,10 @@ export const parseGlob = (globArr, opts = {}, cb = noop) => {
   const blocks = extractMessagesFromGlob(globArr, opts)
   outputPot(
     opts.output,
-    toPot(blocks, { transformHeaders: opts.transformHeaders }),
+    toPot(blocks, {
+      transformHeaders: opts.transformHeaders,
+      disableLineNumbers: opts.disableLineNumbers,
+     }),
     cb
   )
 }
