@@ -61,7 +61,12 @@ export const toPot = (blocks, opts = {}) => {
     headers: transformHeaders(potJson.headers),
   }
 
-  const pot = po.compile(transformedPotJson)
+  const compilerOpts = {}
+  if (opts.noWrap === true) {
+    compilerOpts.foldLength = 0
+  }
+
+  const pot = po.compile(transformedPotJson, compilerOpts)
 
   return pot.toString()
 }
