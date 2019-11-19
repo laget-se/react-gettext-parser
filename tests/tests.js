@@ -367,6 +367,15 @@ describe('react-gettext-parser', () => {
       expect(reference).to.equal('#: tests/fixtures/SingleString.js')
     })
 
+    it('should not wrap lines when passing --no-wrap/noWrap', () => {
+      const messages = extractMessagesFromFile('tests/fixtures/LongText.jsx')
+      const pot = toPot(messages)
+      const potNoWrap = toPot(messages, { noWrap: true })
+      expect(pot.split('\n').length > potNoWrap.split('\n').length).to.equal(
+        true
+      )
+    })
+
     describe('should allow for transform of headers', () => {
       let transformHeaders = null
       const customHeaders = {
