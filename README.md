@@ -54,6 +54,7 @@ Options:
                          whitespace                                         [boolean]
   --trim-newlines        Trims extracted strings from new-lines             [boolean]
   --disable-line-numbers Disables line number ouput in .pot file            [boolean]
+  --no-wrap              Does not break long strings into several lines     [boolean]
 ```
 
 ### Using the API
@@ -291,6 +292,12 @@ Default: `false`
 ##### `disableLineNumbers` (`--disable-line-numbers`)
 
 Disables line number ouput in .pot file
+
+Default: `false`
+
+##### `noWrap` (`--no-wrap`)
+
+Does not break long strings into several lines
 
 Default: `false`
 
