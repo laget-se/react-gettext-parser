@@ -527,4 +527,13 @@ describe('react-gettext-parser', () => {
       expect(messages[0].msgid).to.equal('Optional chaining works')
     })
   })
+
+  describe('nullish coalescing support', () => {
+    it('should parse javascript that contains nullish coalescing operator', () => {
+      const code = getSource('NullishCoalescing.js')
+      const messages = extractMessages(code)
+      expect(messages).to.have.length(1)
+      expect(messages[0].msgid).to.equal('Nullish coalescing works')
+    })
+  })
 })

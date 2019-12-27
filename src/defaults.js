@@ -43,5 +43,6 @@ export const BABEL_PARSING_OPTS = {
     'functionSent',
     'dynamicImport',
     'optionalChaining',
+    'nullishCoalescingOperator',
   ],
 }
