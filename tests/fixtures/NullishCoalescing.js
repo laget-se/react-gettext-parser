@@ -1,10 +1,10 @@
-import { gettext } from 'gettext-lib'
+import { gettext } from 'gettext-lib';
 
-const someObject = {}
+const someObject = {};
 
-const OptionalChaining = () => {
-  const expressionUsingOptionalChaining = someObject.something ?? 'defaultValue'
-  gettext('Nullish coalescing works')
+const NullishCoalescing = () => {
+  const expressionUsingNullishCoalescing = someObject.something ?? 'defaultValue';
+  gettext('Nullish coalescing works');
 }
 
-export default OptionalChaining
+export default NullishCoalescing;
