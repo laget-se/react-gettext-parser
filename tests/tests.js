@@ -498,6 +498,14 @@ describe('react-gettext-parser', () => {
       expect(references[0].column).to.equal(13)
     })
 
+    it('should parse typescript including `as const` syntax', () => {
+      const messages = extractMessagesFromFile('tests/fixtures/AsConst.ts')
+      expect(messages).to.have.length(1)
+      const references = messages[0].comments.reference
+      expect(references[0].line).to.equal(4)
+      expect(references[0].column).to.equal(16)
+    })
+
     it('should parse typescript with jsx', () => {
       const messages = extractMessagesFromFile(
         'tests/fixtures/SingleString.tsx'
