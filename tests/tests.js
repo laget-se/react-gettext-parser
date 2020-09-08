@@ -544,4 +544,13 @@ describe('react-gettext-parser', () => {
       expect(messages[0].msgid).to.equal('Nullish coalescing works')
     })
   })
+
+  describe('pipeline operator support', () => {
+    it('should parse javascript that contains pipeline operator', () => {
+      const code = getSource('PipelineOperator.js')
+      const messages = extractMessages(code)
+      expect(messages).to.have.length(1)
+      expect(messages[0].msgid).to.equal('Pipeline operator works')
+    })
+  })
 })
