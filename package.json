@@ -46,7 +46,7 @@
     "colors": "^1.1.2",
     "convert-newline": "0.0.5",
     "gettext-parser": "^1.1.2",
-    "glob-all": "^3.0.3",
+    "glob-all": "^3.2.1",
     "lodash.curry": "^4.0.1",
     "lodash.groupby": "^4.3.0",
     "lodash.uniq": "^4.2.1",
