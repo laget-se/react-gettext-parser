@@ -448,6 +448,15 @@ export const extractMessages = (code, opts = {}) => {
     }))
   }
 
+  if (Array.isArray(opts.overrideContext) && opts.overrideContext.length > 0) {
+    blocks = opts.overrideContext.reduce((acc, override) => {
+      return [...acc, ...blocks.map(block => ({
+        ...block,
+        msgctxt: override
+      }))]
+    }, [])
+  }
+
   return blocks
 }
 
