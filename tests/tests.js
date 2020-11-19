@@ -30,7 +30,6 @@ describe('react-gettext-parser', () => {
     it('should extract a message from jsx', () => {
       const code = getSource('SingleString.jsx')
       const messages = extractMessages(code)
-
       const expected = getJson('SingleString.json')
 
       expect(messages).to.have.length(1)
@@ -556,7 +555,7 @@ describe('react-gettext-parser', () => {
 
   describe('context override support', () => {
     it('should override context', () => {
-      const code = getSource('SingleString.jsx')
+      const code = getSource('OverrideContext.js')
       const messages = extractMessages(code, {
         overrideContext: ['foo', 'bar'],
       })
