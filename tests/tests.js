@@ -560,9 +560,10 @@ describe('react-gettext-parser', () => {
         overrideContext: ['foo', 'bar'],
       })
       const expected = getJson('OverrideContext.json')
-      expect(messages).to.have.length(2)
+      expect(messages).to.have.length(3)
       expect(messages[0].msgctxt).to.equal(expected[0].msgctxt)
       expect(messages[1].msgctxt).to.equal(expected[1].msgctxt)
+      expect(messages[2].msgctxt).to.equal(expected[2].msgctxt)
     })
   })
 })
