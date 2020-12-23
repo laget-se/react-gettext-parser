@@ -349,7 +349,3 @@ npm run dev
 * [gettext-parser](https://github.com/smhg/gettext-parser) - Parsing and compiling gettext translations between .po/.mo files and JSON
 * [lioness](https://github.com/alexanderwallin/lioness) – Gettext library for React
 * [narp](https://github.com/laget-se/narp) - Workflow CLI tool that syncs translations between your app and Transifex
-
-## License
-
-ISC
