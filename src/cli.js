@@ -36,9 +36,26 @@ const args = yargs
   .option('no-wrap', {
     type: 'boolean',
     description: 'Does not break long strings into several lines',
+  })
+  .option('header', {
+    type: 'array',
+    description:
+      'Sets a POT header value with the syntax "Some-Header: some value". You can specify more than one header. Add a -- after your --header argument(s).',
   }).argv
 
 const filesGlob = args._
+
+const headerInputsToObject = inputs =>
+  inputs
+    .map(x => x.split(':'))
+    .map(x => x.map(y => y.trim()))
+    .reduce(
+      (acc, [key, value]) => ({
+        ...acc,
+        [key.toLowerCase()]: value,
+      }),
+      {}
+    )
 
 let opts = {
   output: args.output,
@@ -47,6 +64,10 @@ let opts = {
   trimNewlines: args['trim-newlines'],
   disableLineNumbers: args['disable-line-numbers'],
   noWrap: args['no-wrap'],
+  transformHeaders: headers => ({
+    ...headers,
+    ...headerInputsToObject(args.header || []),
+  }),
 }
 
 if (args.config) {

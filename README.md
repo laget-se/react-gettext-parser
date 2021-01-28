@@ -55,6 +55,9 @@ Options:
   --trim-newlines        Trims extracted strings from new-lines             [boolean]
   --disable-line-numbers Disables line number ouput in .pot file            [boolean]
   --no-wrap              Does not break long strings into several lines     [boolean]
+  --header               Sets a POT header value with the syntax "Some-Header:
+                         some value". You can specify more than one header. Add
+                         a -- after your --header argument(s).          [array]
 ```
 
 ### Using the API
