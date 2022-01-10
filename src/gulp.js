@@ -3,7 +3,7 @@ import path from 'path'
 import through from 'through2'
 import Vinyl from 'vinyl'
 import PluginError from 'plugin-error'
-import colors from 'colors'
+import c from 'ansi-colors'
 
 import { toPot } from './json2pot'
 import { extractMessages, getUniqueBlocks } from './parse'
@@ -57,7 +57,7 @@ export const gulp = (opts = {}) => {
 
     this.push(potFile)
 
-    console.log(`Writing .pot file to ${options.output}`.green)
+    console.log(c.green(`Writing .pot file to ${options.output}`))
 
     cb()
   }

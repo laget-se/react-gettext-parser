@@ -1,5 +1,4 @@
 import path from 'path'
-import colors from 'colors'
 import yargs from 'yargs'
 
 import { parseGlob } from './parse.js'

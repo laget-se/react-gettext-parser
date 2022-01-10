@@ -1,5 +1,5 @@
 import fs from 'fs'
-import colors from 'colors'
+import c from 'ansi-colors'
 
 export const outputPot = (filePath, contents, cb = () => {}) => {
   if (filePath) {
@@ -8,7 +8,7 @@ export const outputPot = (filePath, contents, cb = () => {}) => {
     console.log(contents)
   }
 
-  console.log(`Did write .pot contents to ${filePath}`.green)
+  console.log(c.green(`Did write .pot contents to ${filePath}`))
 
   cb()
 }
