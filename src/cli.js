@@ -45,10 +45,10 @@ const args = yargs
 
 const filesGlob = args._
 
-const headerInputsToObject = inputs =>
+const headerInputsToObject = (inputs) =>
   inputs
-    .map(x => x.split(':'))
-    .map(x => x.map(y => y.trim()))
+    .map((x) => x.split(':'))
+    .map((x) => x.map((y) => y.trim()))
     .reduce(
       (acc, [key, value]) => ({
         ...acc,
@@ -64,7 +64,7 @@ let opts = {
   trimNewlines: args['trim-newlines'],
   disableLineNumbers: args['disable-line-numbers'],
   noWrap: args['no-wrap'],
-  transformHeaders: headers => ({
+  transformHeaders: (headers) => ({
     ...headers,
     ...headerInputsToObject(args.header || []),
   }),

@@ -1,11 +1,11 @@
 /* eslint-env mocha */
 /* eslint no-unused-expressions: 0 */
 
+import fs from 'fs'
+import path from 'path'
 import { expect } from 'chai'
 import { spy, stub } from 'sinon'
 import { po } from 'gettext-parser'
-import fs from 'fs'
-import path from 'path'
 
 import {
   extractMessages,
@@ -19,7 +19,7 @@ import * as io from '../src/io.js'
 
 const converter = require('convert-newline')('lf').string()
 
-const getSource = file =>
+const getSource = (file) =>
   fs.readFileSync(path.join(__dirname, 'fixtures', file), 'utf8')
 
 // eslint-disable-next-line
@@ -363,7 +363,7 @@ describe('react-gettext-parser', () => {
       const pot = toPot(messages, { disableLineNumbers: true })
       const reference = pot
         .split('\n')
-        .find(line => line.startsWith('#: tests/fixtures/SingleString.js'))
+        .find((line) => line.startsWith('#: tests/fixtures/SingleString.js'))
       expect(reference).to.equal('#: tests/fixtures/SingleString.js')
     })
 
@@ -464,7 +464,7 @@ describe('react-gettext-parser', () => {
 
       const glob = ['./tests/fixtures/{*.js,*.jsx,*.ts,*.tsx}']
       const globMessages = extractMessagesFromGlob(glob)
-      globMessages.forEach(message => {
+      globMessages.forEach((message) => {
         expect(
           /^tests\//.test(message.comments.reference[0].filename)
         ).to.equal(true)

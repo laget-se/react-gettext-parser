@@ -12,10 +12,10 @@ export const isGettextComponent = (names, node) => {
   return names.indexOf(node.name.name) !== -1
 }
 
-export const getFuncName = node =>
+export const getFuncName = (node) =>
   node.callee.object ? node.callee.property.name : node.callee.name
 
-export const getStringFromTemplateLiteral = node => {
+export const getStringFromTemplateLiteral = (node) => {
   if (
     node.type === 'TemplateLiteral' &&
     node.quasis !== undefined &&
@@ -33,7 +33,7 @@ export const getStringFromTemplateLiteral = node => {
  * Returns a raw string from some JSX attributes or call
  * expression arguments.
  */
-export const getGettextStringFromNodeArgument = arg => {
+export const getGettextStringFromNodeArgument = (arg) => {
   if (arg.type === 'JSXAttribute') {
     return getGettextStringFromNodeArgument(arg.value)
   }

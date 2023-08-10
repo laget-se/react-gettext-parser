@@ -5,8 +5,8 @@ import Vinyl from 'vinyl'
 import PluginError from 'plugin-error'
 import colors from 'colors'
 
-import { toPot } from './json2pot'
-import { extractMessages, getUniqueBlocks } from './parse'
+import { toPot } from './json2pot.js'
+import { extractMessages, getUniqueBlocks } from './parse.js'
 
 const GULP_OPTS = {
   output: 'messages.pot',

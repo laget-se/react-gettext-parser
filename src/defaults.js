@@ -44,6 +44,6 @@ export const BABEL_PARSING_OPTS = {
     'dynamicImport',
     'optionalChaining',
     'nullishCoalescingOperator',
-    ['pipelineOperator', { 'proposal': 'minimal' }],
+    ['pipelineOperator', { proposal: 'minimal' }],
   ],
 }

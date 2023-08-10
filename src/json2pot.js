@@ -6,7 +6,7 @@ import groupBy from 'lodash.groupby'
  * structure from a list of gettext blocks.
  */
 const createTranslationsTable = (blocks, headers = {}) => {
-  const translations = groupBy(blocks, b => b.msgctx || '')
+  const translations = groupBy(blocks, (b) => b.msgctx || '')
 
   // Hack
   // TODO: Explain this gettext-parser thingy
@@ -35,11 +35,11 @@ const convertReferenceToString = (reference, disableLineNumbers) =>
     : `${reference.filename}:${reference.line}`
 
 const convertCommentArraysToStrings = (blocks, disableLineNumbers = false) =>
-  blocks.map(b => ({
+  blocks.map((b) => ({
     ...b,
     comments: {
       reference: b.comments.reference
-        .map(ref => convertReferenceToString(ref, disableLineNumbers))
+        .map((ref) => convertReferenceToString(ref, disableLineNumbers))
         .join('\n'),
       extracted: b.comments.extracted.join('\n'),
     },
@@ -55,7 +55,7 @@ export const toPot = (blocks, opts = {}) => {
   // Allow the consumer to transform headers
   const transformHeaders = opts.transformHeaders
     ? opts.transformHeaders
-    : x => x
+    : (x) => x
   const transformedPotJson = {
     ...potJson,
     headers: transformHeaders(potJson.headers),
