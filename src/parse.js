@@ -10,15 +10,15 @@ import {
   GETTEXT_FUNC_ARGS_MAP,
   GETTEXT_COMPONENT_PROPS_MAP,
   BABEL_PARSING_OPTS,
-} from './defaults'
-import { outputPot } from './io'
-import { toPot } from './json2pot'
+} from './defaults.js'
+import { outputPot } from './io.js'
+import { toPot } from './json2pot.js'
 import {
   isGettextFuncCall,
   isGettextComponent,
   getFuncName,
   getGettextStringFromNodeArgument,
-} from './node-helpers'
+} from './node-helpers.js'
 
 const noop = () => {}
 
@@ -35,7 +35,7 @@ const getEmptyBlock = () => ({
   },
 })
 
-const getBabelParsingOptions = sourceType => {
+const getBabelParsingOptions = (sourceType) => {
   if (sourceType === TYPESCRIPT) {
     return {
       ...BABEL_PARSING_OPTS,
@@ -57,7 +57,7 @@ const getGettextBlockFromComponent = (propsMap, node) => {
   const gettextPropNames = Object.keys(componentPropsLookup)
 
   const propValues = node.attributes
-    .filter(attr => gettextPropNames.indexOf(attr.name.name) !== -1)
+    .filter((attr) => gettextPropNames.indexOf(attr.name.name) !== -1)
     .reduce(
       (props, attr) => ({
         ...props,
@@ -115,7 +115,7 @@ const compareReference = (a, b) => {
 /**
  * Returns a file path relative to the current working directory
  */
-const getRelativeReferencePath = filepath => {
+const getRelativeReferencePath = (filepath) => {
   if (typeof filepath === 'string') {
     return path.relative(process.cwd(), path.resolve(filepath))
   }
@@ -129,12 +129,12 @@ const getRelativeReferencePath = filepath => {
  * Translator comments and source code reference comments are
  * concatenated.
  */
-export const getUniqueBlocks = blocks =>
+export const getUniqueBlocks = (blocks) =>
   blocks
-    .filter(x => x.msgid && x.msgid.trim())
+    .filter((x) => x.msgid && x.msgid.trim())
     .reduce((unique, block) => {
       const isEqualBlock = areBlocksEqual(block)
-      const existingBlock = unique.filter(x => isEqualBlock(x)).shift()
+      const existingBlock = unique.filter((x) => isEqualBlock(x)).shift()
 
       if (existingBlock) {
         // Concatenate comments to translators
@@ -158,7 +158,7 @@ export const getUniqueBlocks = blocks =>
           existingBlock.msgstr = block.msgstr
         }
 
-        return unique.map(x => (isEqualBlock(x) ? existingBlock : x))
+        return unique.map((x) => (isEqualBlock(x) ? existingBlock : x))
       }
 
       return unique.concat(block)
@@ -348,7 +348,7 @@ export const getTraverser = (cb = noop, opts = {}) => {
             return Object.keys(arg).reduce((acc, prop) => {
               const gettextPropName = arg[prop]
               const matchingObjectValue = node.arguments[i].properties.find(
-                x => x.key.name === prop
+                (x) => x.key.name === prop
               ).value.value
               return gettextPropName === 'comment'
                 ? {
@@ -373,13 +373,13 @@ export const getTraverser = (cb = noop, opts = {}) => {
         if (Array.isArray(parent.leadingComments) === true) {
           const translatorCommentRegex = /Translators:.+/
           const commentNode = parent.leadingComments.find(
-            x => translatorCommentRegex.test(x.value) === true
+            (x) => translatorCommentRegex.test(x.value) === true
           )
 
           if (commentNode !== undefined) {
             const commentLine = commentNode.value
               .split(/\n/)
-              .find(x => translatorCommentRegex.test(x))
+              .find((x) => translatorCommentRegex.test(x))
 
             if (commentLine !== undefined) {
               const comment = commentLine
@@ -416,7 +416,7 @@ export const extractMessages = (code, opts = {}) => {
     code.toString('utf8'),
     getBabelParsingOptions(opts.sourceType)
   )
-  const traverser = getTraverser(_blocks => {
+  const traverser = getTraverser((_blocks) => {
     blocks = _blocks
   }, opts)
 
@@ -424,25 +424,25 @@ export const extractMessages = (code, opts = {}) => {
 
   // Remove whitespace according to options
   if (opts.trim) {
-    blocks = blocks.map(block => ({
+    blocks = blocks.map((block) => ({
       ...block,
       msgid: block.msgid.trim(),
     }))
   }
   if (opts.trimLines) {
-    blocks = blocks.map(block => ({
+    blocks = blocks.map((block) => ({
       ...block,
       msgid: block.msgid
         .split('\n')
-        .map(x => x.trim())
-        .filter(x => x)
+        .map((x) => x.trim())
+        .filter((x) => x)
         .join('\n'),
     }))
   }
   if (opts.trimNewlines) {
     const replaceValue =
       typeof opts.trimNewlines === 'string' ? opts.trimNewlines : ''
-    blocks = blocks.map(block => ({
+    blocks = blocks.map((block) => ({
       ...block,
       msgid: block.msgid.replace(/\n/g, replaceValue),
     }))
