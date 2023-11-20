@@ -23,7 +23,7 @@ const getSource = (file) =>
   fs.readFileSync(path.join(__dirname, 'fixtures', file), 'utf8')
 
 // eslint-disable-next-line
-const getJson = file => require(`./fixtures/${file}`)
+const getJson = (file) => require(`./fixtures/${file}`)
 
 describe('react-gettext-parser', () => {
   describe('basic extraction', () => {
@@ -71,6 +71,16 @@ describe('react-gettext-parser', () => {
       )
       expect(messages[2].comments.extracted[0]).to.equal(
         'Instructions inside block comment'
+      )
+    })
+
+    it("should extract translators' comments from .tsx files", () => {
+      const code = getSource('Comments.tsx')
+      const messages = extractMessages(code, { sourceType: TYPESCRIPT })
+
+      expect(messages[0].comments.extracted[0]).to.equal('This is a comment')
+      expect(messages[1].comments.extracted[0]).to.equal(
+        'This is also a comment'
       )
     })
 
