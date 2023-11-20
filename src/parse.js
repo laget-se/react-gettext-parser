@@ -370,11 +370,14 @@ export const getTraverser = (cb = noop, opts = {}) => {
         }
 
         // Extract comments for translators
-        if (Array.isArray(parent.leadingComments) === true) {
+        const leadingComments =
+          parent.leadingComments || parent.expression?.leadingComments
+        if (Array.isArray(leadingComments) === true) {
           const translatorCommentRegex = /Translators:.+/
-          const commentNode = parent.leadingComments.find(
+          const commentNode = leadingComments.find(
             (x) => translatorCommentRegex.test(x.value) === true
           )
+          console.log({ commentNode })
 
           if (commentNode !== undefined) {
             const commentLine = commentNode.value
