@@ -377,7 +377,6 @@ export const getTraverser = (cb = noop, opts = {}) => {
           const commentNode = leadingComments.find(
             (x) => translatorCommentRegex.test(x.value) === true
           )
-          console.log({ commentNode })
 
           if (commentNode !== undefined) {
             const commentLine = commentNode.value
